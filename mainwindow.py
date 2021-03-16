@@ -4,6 +4,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic
+import pyqtgraph as pg
 
 from datasources import BPMData
 from dataprocessor import DataProcessor
@@ -61,6 +62,11 @@ class MainWindow(QMainWindow):
         self.data_proc_Z.data_processed.connect(self.on_freq_status_Z)
 
         self.plots_customization()
+
+        self.controlWidgetX.boards_changed.connect(self.region_X_changed)
+        self.controlWidgetZ.boards_changed.connect(self.region_Z_changed)
+
+
         self.data_curve1 = self.ui.plotX.plot(pen = 'r', title = 'Generated signal X_plot')
         self.data_curve2 = self.ui.plotFX.plot(pen = 'r', title = 'Fourier Transform X_plot')
         self.data_curve3 = self.ui.plotZ.plot(pen = 'b', title='Generated signal Z_plot')
@@ -78,6 +84,8 @@ class MainWindow(QMainWindow):
 
         self.ui.plotFX.setLabel('left',label_str_x.format("Ax"))
         self.ui.plotFX.setYRange(0, 0.8, padding =0)
+        self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
+        self.ui.plotFX.addItem(self.FX)
         self.customize_plot(self.ui.plotFX)
 
         self.ui.plotZ.setLabel('left', label_str_z.format("Z"))
@@ -86,6 +94,8 @@ class MainWindow(QMainWindow):
 
         self.ui.plotFZ.setLabel('left', label_str_z.format("Az"))
         self.ui.plotFZ.setYRange(0, 0.4)
+        self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
+        self.ui.plotFZ.addItem(self.FZ)
         self.customize_plot(self.ui.plotFZ)
 
     def customize_plot(self, plot):
@@ -113,6 +123,17 @@ class MainWindow(QMainWindow):
             plot.setLogMode(False, False)
         if scale == 'Log_Y':
             plot.setLogMode(False, True)
+
+    def region_Z_changed(self, dict):
+        """   """
+        self.FZ.setRegion([dict.get("lboard", 0.1), dict.get("rboard", 0.5)])
+
+    def region_X_changed(self, dict):
+        """   """
+        self.FX.setRegion([dict.get("lboard", 0.1), dict.get("rboard", 0.5)])
+
+
+
 
     # def on_plot_scale_changing(self, plot):
     #     """   """
