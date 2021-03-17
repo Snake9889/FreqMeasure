@@ -3,6 +3,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 import pyqtgraph as pg
 
@@ -13,6 +14,9 @@ from settingscontrol import SettingsControl
 
 class MainWindow(QMainWindow):
     """   """
+
+    region_changed = pyqtSignal(object)
+
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = uic.loadUi('MainWindow.ui', self)
@@ -63,8 +67,8 @@ class MainWindow(QMainWindow):
 
         self.plots_customization()
 
-        self.controlWidgetX.boards_changed.connect(self.region_X_changed)
-        self.controlWidgetZ.boards_changed.connect(self.region_Z_changed)
+        self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
+        self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)
 
 
         self.data_curve1 = self.ui.plotX.plot(pen = 'r', title = 'Generated signal X_plot')
@@ -86,6 +90,7 @@ class MainWindow(QMainWindow):
         self.ui.plotFX.setYRange(0, 0.8, padding =0)
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
         self.ui.plotFX.addItem(self.FX)
+        self.FX.sigRegionChanged.connect(self.region_X_changed)
         self.customize_plot(self.ui.plotFX)
 
         self.ui.plotZ.setLabel('left', label_str_z.format("Z"))
@@ -96,6 +101,7 @@ class MainWindow(QMainWindow):
         self.ui.plotFZ.setYRange(0, 0.4)
         self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
         self.ui.plotFZ.addItem(self.FZ)
+        self.FZ.sigRegionChanged.connect(self.region_Z_changed)
         self.customize_plot(self.ui.plotFZ)
 
     def customize_plot(self, plot):
@@ -124,27 +130,29 @@ class MainWindow(QMainWindow):
         if scale == 'Log_Y':
             plot.setLogMode(False, True)
 
-    def region_Z_changed(self, dict):
-        """   """
-        self.FZ.setRegion([dict.get("lboard", 0.1), dict.get("rboard", 0.5)])
 
-    def region_X_changed(self, dict):
+    def boards_X_changed(self, dict):
         """   """
         self.FX.setRegion([dict.get("lboard", 0.1), dict.get("rboard", 0.5)])
 
+    def boards_Z_changed(self, dict):
+        """   """
+        self.FZ.setRegion([dict.get("lboard", 0.1), dict.get("rboard", 0.5)])
 
+    def region_X_changed(self):
+        """   """
+        self.controlWidgetX.boards = self.FX.getRegion()
+        print(self.controlWidgetX.boards)
+        self.controlWidgetX.lboardSBox.setValue(self.controlWidgetX.boards[0])
+        self.controlWidgetX.rboardSBox.setValue(self.controlWidgetX.boards[1])
 
+    def region_Z_changed(self):
+        """   """
+        self.controlWidgetZ.boards = self.FZ.getRegion()
+        print(self.controlWidgetZ.boards)
+        self.controlWidgetZ.lboardSBox.setValue(self.controlWidgetZ.boards[0])
+        self.controlWidgetZ.rboardSBox.setValue(self.controlWidgetZ.boards[1])
 
-    # def on_plot_scale_changing(self, plot):
-    #     """   """
-    #     if self.str_id == "Data X":
-    #         print("Sanechek")
-    #         self.ui.plotFX.setLogMode(False, True)
-    #         pass
-    #     elif self.str_id == "Data Z":
-    #         pass
-    #     else:
-    #         pass
 
     def on_exit_button(self):
         print(self, ' Exiting... Bye...')
