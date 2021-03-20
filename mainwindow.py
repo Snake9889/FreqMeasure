@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 
     region_changed = pyqtSignal(object)
 
-    def __init__(self):
+    def __init__(self, data_source):
         super(MainWindow, self).__init__()
         self.ui = uic.loadUi('MainWindow.ui', self)
 
@@ -28,7 +28,9 @@ class MainWindow(QMainWindow):
         self.buttonExit.clicked.connect(self.on_exit_button)
         self.buttonExit.clicked.connect(QApplication.instance().quit)
 
-        self.data_source = BPMData(1024, self)
+        #self.data_source = BPMData(1024, self)
+        self.data_source = data_source
+
         self.data_source.data_ready.connect(self.on_data1_ready)
         self.data_source.data_ready.connect(self.on_data3_ready)
 

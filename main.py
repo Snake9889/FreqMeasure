@@ -5,7 +5,10 @@ from PyQt5.QtCore import QCoreApplication, QSettings
 import signal
 import pyqtgraph as pg
 from mainwindow import *
-from datasources import BPMData
+
+#from datasources import BPMData
+from datasources_bpm import BPMData
+
 from dataprocessor import DataProcessor
 from settingscontrol import SettingsControl
 from controlwidget import ControlWidget
@@ -27,12 +30,14 @@ if __name__ == "__main__":
     QSettings.setDefaultFormat(QSettings.IniFormat)
 
     app = QApplication(sys.argv)
+    
+    # argument parser....
 
-#	data_source = BPMData()
-#  data_proc_X = DataProcessor("X")
-#  data_proc_Z = DataProcessor("Z")
+    data_source = BPMData(1024)
+#    data_proc_X = DataProcessor("X")
+#    data_proc_Z = DataProcessor("Z")
 
-    mw = MainWindow()
+    mw = MainWindow(data_source)
 
     mw.show()
     sys.exit(app.exec_())
