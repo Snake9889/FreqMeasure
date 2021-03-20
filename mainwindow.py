@@ -78,7 +78,6 @@ class MainWindow(QMainWindow):
 
     def plots_customization(self):
         """   """
-
         label_str_x = "<span style=\"color:red;font-size:16px\">{}</span>"
         label_str_z = "<span style=\"color:blue;font-size:16px\">{}</span>"
 
@@ -152,7 +151,6 @@ class MainWindow(QMainWindow):
         print(self.controlWidgetZ.boards)
         self.controlWidgetZ.lboardSBox.setValue(self.controlWidgetZ.boards[0])
         self.controlWidgetZ.rboardSBox.setValue(self.controlWidgetZ.boards[1])
-
 
     def on_exit_button(self):
         print(self, ' Exiting... Bye...')

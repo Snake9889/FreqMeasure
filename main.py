@@ -5,6 +5,10 @@ from PyQt5.QtCore import QCoreApplication, QSettings
 import signal
 import pyqtgraph as pg
 from mainwindow import *
+from datasources import BPMData
+from dataprocessor import DataProcessor
+from settingscontrol import SettingsControl
+from controlwidget import ControlWidget
 
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -15,6 +19,7 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 signal.signal(signal.SIGTERM, signal.SIG_DFL)
 
 if __name__ == "__main__":
+    """   """
     import sys
 
     QCoreApplication.setOrganizationName("Denisov")
@@ -22,6 +27,10 @@ if __name__ == "__main__":
     QSettings.setDefaultFormat(QSettings.IniFormat)
 
     app = QApplication(sys.argv)
+
+#	data_source = BPMData()
+#  data_proc_X = DataProcessor("X")
+#  data_proc_Z = DataProcessor("Z")
 
     mw = MainWindow()
 
