@@ -38,6 +38,9 @@ class MainWindow(QMainWindow):
         self.data_proc_Z = DataProcessor("Z")
         self.data_source.data_ready.connect(self.data_proc_X.on_data_recv)
         self.data_source.data_ready.connect(self.data_proc_Z.on_data_recv)
+
+
+
         self.data_proc_X.data_processed.connect(self.on_data2_ready)
         self.data_proc_Z.data_processed.connect(self.on_data4_ready)
 
