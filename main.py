@@ -31,13 +31,20 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     
-    # argument parser....
+#    argument parser....
 
     data_source = BPMData(1024)
-#    data_proc_X = DataProcessor("X")
-#    data_proc_Z = DataProcessor("Z")
+    data_proc_X = DataProcessor("X")
+    data_proc_Z = DataProcessor("Z")
+    settings_control = SettingsControl()
+    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settings_control)
+    
+    
+	data_source.data_ready.connect(mw.on_data1_ready)
+    data_source.data_ready.connect(mw.on_data3_ready)
+	data_source.data_ready.connect(data_proc_X.on_data_recv)
+    data_source.data_ready.connect(data_proc_Z.on_data_recv)
 
-    mw = MainWindow(data_source)
 
     mw.show()
     sys.exit(app.exec_())

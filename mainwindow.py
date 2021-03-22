@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 
     region_changed = pyqtSignal(object)
 
-    def __init__(self, data_source):
+    def __init__(self, data_source, data_proc_X, data_proc_Z, SettingsControl):
         super(MainWindow, self).__init__()
         self.ui = uic.loadUi('MainWindow.ui', self)
 
@@ -25,21 +25,14 @@ class MainWindow(QMainWindow):
         self.window_str = "None"
         self.frq_founded = 0.0
 
-        self.buttonExit.clicked.connect(self.on_exit_button)
-        self.buttonExit.clicked.connect(QApplication.instance().quit)
-
         #self.data_source = BPMData(1024, self)
         self.data_source = data_source
 
-        self.data_source.data_ready.connect(self.on_data1_ready)
-        self.data_source.data_ready.connect(self.on_data3_ready)
-
-        self.data_proc_X = DataProcessor("X")
-        self.data_proc_Z = DataProcessor("Z")
-        self.data_source.data_ready.connect(self.data_proc_X.on_data_recv)
-        self.data_source.data_ready.connect(self.data_proc_Z.on_data_recv)
-
-
+        self.data_proc_X = data_proc_X
+        self.data_proc_Z = data_proc_Z
+                
+        self.buttonExit.clicked.connect(self.on_exit_button)
+        self.buttonExit.clicked.connect(QApplication.instance().quit)
 
         self.data_proc_X.data_processed.connect(self.on_data2_ready)
         self.data_proc_Z.data_processed.connect(self.on_data4_ready)
@@ -60,7 +53,7 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
 
-        self.settingsControl = SettingsControl()
+        self.settingsControl = settings_control
         self.settingsControl.add_object(self.controlWidgetX)
         self.settingsControl.add_object(self.controlWidgetZ)
         self.buttonRead.clicked.connect(self.on_read_button)
