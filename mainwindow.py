@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 
     region_changed = pyqtSignal(object)
 
-    def __init__(self, data_source, data_proc_X, data_proc_Z, SettingsControl):
+    def __init__(self, data_source, data_proc_X, data_proc_Z, settings_control):
         super(MainWindow, self).__init__()
         self.ui = uic.loadUi('MainWindow.ui', self)
 

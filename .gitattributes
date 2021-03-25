@@ -29,4 +29,7 @@
 # (among others).
 
 # https://docs.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+*.ui text diff=python
+*.ui text eol=lf
 *.py text eol=lf
+

@@ -242,9 +242,15 @@
      <x>0</x>
      <y>0</y>
      <width>1031</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string> </string>
+    </property>
+   </widget>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
