@@ -6,12 +6,10 @@ import signal
 import pyqtgraph as pg
 from mainwindow import *
 
-#from datasources import BPMData
-from datasources_bpm import BPMData
-
 from dataprocessor import DataProcessor
 from settingscontrol import SettingsControl
 from controlwidget import ControlWidget
+from command_parser import TerminalParser
 
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -31,9 +29,22 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     
-#    argument parser....
+    argument_parser = TerminalParser()
+    bpm_name_parsed = argument_parser.bpm_name_parsed
+    simulate_data = 0
+    data_source = None
 
-    data_source = BPMData(1024)
+    if simulate_data:
+        from datasources import BPMData
+        data_source = BPMData(2048)
+    else:
+        from datasources_bpm import BPMData
+        data_source = BPMData(bpm_name = bpm_name_parsed)
+
+    if data_source is None:
+        print("Fucking data source!!!")
+        exit()
+    
     data_proc_X = DataProcessor("X")
     data_proc_Z = DataProcessor("Z")
     settings_control = SettingsControl()
