@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
 
         self.data_proc_X = data_proc_X
         self.data_proc_Z = data_proc_Z
-                
+
         self.buttonExit.clicked.connect(self.on_exit_button)
         self.buttonExit.clicked.connect(QApplication.instance().quit)
 
