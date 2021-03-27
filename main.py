@@ -37,12 +37,17 @@ if __name__ == "__main__":
     if simulate_data:
         from datasources import BPMData
         data_source = BPMData(2048)
+        
+    elif bpm_name_parsed == "model":
+        from datasources import BPMData
+        data_source =  BPMData(2048)
+    
     else:
         from datasources_bpm import BPMData
         data_source = BPMData(bpm_name = bpm_name_parsed)
 
     if data_source is None:
-        print("Fucking data source!!!")
+        print("Data source doesn't exists!!! You can't use this program!!!")
         exit()
     
     data_proc_X = DataProcessor("X")

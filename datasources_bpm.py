@@ -49,8 +49,8 @@ class BPMData(QObject):
         print(bpm_data_name)
         print(bpm_numpts_name)
 
-        self.bpmChan        = cda.VChan(bpm_data_name, max_nelems = 8 * 1024 * 4, dtype = cda.CXDTYPE_INT32)
-        self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
+        #self.bpmChan        = cda.VChan(bpm_data_name, max_nelems = 8 * 1024 * 4, dtype = cda.CXDTYPE_INT32)
+        #self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
 
         self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
         self.bpmChan.valueMeasured.connect(self._on_signal_update)
