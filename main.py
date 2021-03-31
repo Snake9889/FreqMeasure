@@ -28,20 +28,20 @@ if __name__ == "__main__":
     QSettings.setDefaultFormat(QSettings.IniFormat)
 
     app = QApplication(sys.argv)
-    
+
     argument_parser = TerminalParser()
     bpm_name_parsed = argument_parser.bpm_name_parsed
-    simulate_data = 0
+    #simulate_data = 0
     data_source = None
 
-    if simulate_data:
-        from datasources import BPMData
-        data_source = BPMData(2048)
-        
-    elif bpm_name_parsed == "model":
+    #if simulate_data:
+    #    from datasources import BPMData
+    #    data_source = BPMData(2048)
+
+    if bpm_name_parsed == "model":
         from datasources import BPMData
         data_source =  BPMData(2048)
-    
+
     else:
         from datasources_bpm import BPMData
         data_source = BPMData(bpm_name = bpm_name_parsed)
@@ -49,13 +49,13 @@ if __name__ == "__main__":
     if data_source is None:
         print("Data source doesn't exists!!! You can't use this program!!!")
         exit()
-    
+
     data_proc_X = DataProcessor("X")
     data_proc_Z = DataProcessor("Z")
     settings_control = SettingsControl()
     mw = MainWindow(data_source, data_proc_X, data_proc_Z, settings_control)
-    
-    
+
+
     data_source.data_ready.connect(mw.on_data1_ready)
     data_source.data_ready.connect(mw.on_data3_ready)
     data_source.data_ready.connect(data_proc_X.on_data_recv)
