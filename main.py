@@ -31,8 +31,8 @@ if __name__ == "__main__":
 
     argument_parser = TerminalParser()
     bpm_name_parsed = argument_parser.bpm_name_parsed
-    #simulate_data = 0
     data_source = None
+    #simulate_data = 0
 
     #if simulate_data:
     #    from datasources import BPMData
@@ -52,14 +52,23 @@ if __name__ == "__main__":
 
     data_proc_X = DataProcessor("X")
     data_proc_Z = DataProcessor("Z")
-    settings_control = SettingsControl()
-    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settings_control)
-
+    settingsControl = SettingsControl()
+    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
 
     data_source.data_ready.connect(mw.on_data1_ready)
     data_source.data_ready.connect(mw.on_data3_ready)
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
+
+    #self.settingsControl = settings_control
+    settingsControl.add_object(mw.controlWidgetX)
+    settingsControl.add_object(mw.controlWidgetZ)
+    #self.buttonRead.clicked.connect(mw.on_read_button)
+    #self.buttonSave.clicked.connect(mw.on_save_button)
+    settingsControl.read_settings()
+
+    data_proc_X.data_processed.connect(mw.on_freq_status_X)
+    data_proc_Z.data_processed.connect(mw.on_freq_status_Z)
 
 
     mw.show()

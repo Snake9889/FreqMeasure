@@ -7,9 +7,9 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 import pyqtgraph as pg
 
-from datasources import BPMData
-from dataprocessor import DataProcessor
-from settingscontrol import SettingsControl
+#from datasources import BPMData
+#from dataprocessor import DataProcessor
+#from settingscontrol import SettingsControl
 
 
 class MainWindow(QMainWindow):
@@ -25,11 +25,12 @@ class MainWindow(QMainWindow):
         self.window_str = "None"
         self.frq_founded = 0.0
 
-        #self.data_source = BPMData(1024, self)
         self.data_source = data_source
 
         self.data_proc_X = data_proc_X
         self.data_proc_Z = data_proc_Z
+
+        self.settingsControl = settings_control
 
         self.buttonExit.clicked.connect(self.on_exit_button)
         self.buttonExit.clicked.connect(QApplication.instance().quit)
@@ -53,15 +54,12 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
 
-        self.settingsControl = settings_control
-        self.settingsControl.add_object(self.controlWidgetX)
-        self.settingsControl.add_object(self.controlWidgetZ)
+        #self.settingsControl = settings_control
+        #self.settingsControl.add_object(self.controlWidgetX)
+        #self.settingsControl.add_object(self.controlWidgetZ)
         self.buttonRead.clicked.connect(self.on_read_button)
         self.buttonSave.clicked.connect(self.on_save_button)
-        self.settingsControl.read_settings()
-
-        self.data_proc_X.data_processed.connect(self.on_freq_status_X)
-        self.data_proc_Z.data_processed.connect(self.on_freq_status_Z)
+        #self.settingsControl.read_settings()
 
         self.plots_customization()
 
