@@ -108,8 +108,8 @@ class ControlWidget(QWidget):
 
     def on_boards_changed(self):
         """   """
-        if self.lboard >= self.rboard - 0.01:
-            self.lboard = self.lboard - 0.01
+        if self.lboard == self.rboard:
+            self.lboard = self.lboard
             self.rboard = self.rboard + 0.01
 
         self.boards = {

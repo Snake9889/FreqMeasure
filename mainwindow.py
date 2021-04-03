@@ -85,7 +85,7 @@ class MainWindow(QMainWindow):
         self.ui.plotFX.setYRange(0, 0.8, padding =0)
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
         self.ui.plotFX.addItem(self.FX)
-        self.FX.sigRegionChanged.connect(self.region_X_changed)
+        #self.FX.sigRegionChanged.connect(self.region_X_changed)
         self.customize_plot(self.ui.plotFX)
 
         self.ui.plotZ.setLabel('left', label_str_z.format("Z"))
@@ -96,8 +96,10 @@ class MainWindow(QMainWindow):
         self.ui.plotFZ.setTitle(label_str_z.format("Az"))
         self.ui.plotFZ.setYRange(0, 0.4)
         self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
+        self.FZ.setZValue(-10)
         self.ui.plotFZ.addItem(self.FZ, ignoreBounds = True)
-        self.FZ.sigRegionChanged.connect(self.region_Z_changed)
+        #self.FZ.sigRegionChanged.connect(self.region_Z_changed)
+        self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
         self.customize_plot(self.ui.plotFZ)
 
     def customize_plot(self, plot):
@@ -144,10 +146,18 @@ class MainWindow(QMainWindow):
 
     def region_Z_changed(self):
         """   """
+        print('Sergei')
         self.controlWidgetZ.boards = self.FZ.getRegion()
         print(self.controlWidgetZ.boards)
-        self.controlWidgetZ.lboardSBox.setValue(self.controlWidgetZ.boards[0])
-        self.controlWidgetZ.rboardSBox.setValue(self.controlWidgetZ.boards[1])
+        #if self.controlWidgetZ.boards[0]>self.controlWidgetZ.boards[1]:
+
+        #self.controlWidgetZ.lboardSBox.setValue(self.controlWidgetZ.boards[0])
+        #self.controlWidgetZ.rboardSBox.setValue(self.controlWidgetZ.boards[1])
+        x1=float(self.controlWidgetZ.boards[0])
+        x2=float(self.controlWidgetZ.boards[1])
+
+        self.controlWidgetZ.lboardSBox.setValue(min(x1,x2))
+        self.controlWidgetZ.rboardSBox.setValue(max(x1,x2))
 
     def on_exit_button(self):
         print(self, ' Exiting... Bye...')
