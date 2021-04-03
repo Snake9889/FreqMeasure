@@ -23,7 +23,7 @@ class BPMData(QObject):
         self.num_pts = 1024
         self.data_len = self.num_pts
 
-        self.tmp = None
+        self.data = None
         self.dataT = None
         self.dataX = None
         self.dataZ = None
@@ -49,29 +49,29 @@ class BPMData(QObject):
         print(bpm_data_name)
         print(bpm_numpts_name)
 
-        #self.bpmChan        = cda.VChan(bpm_data_name, max_nelems = 8 * 1024 * 4, dtype = cda.CXDTYPE_INT32)
-        #self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
+        self.bpmChan        = cda.VChan(bpm_data_name, max_nelems = 8 * 1024 * 4, dtype = cda.DTYPE_INT32)
+        self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
 
         self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
         self.bpmChan.valueMeasured.connect(self._on_signal_update)
 
     def _on_signal_update(self, chan):
-        # print('Signal received ... = {}'.format(chan.val))
+        #print('Signal received ... = {}'.format(chan.val))
         print('Signal received ...')
-        self.tmp = np.frombuffer(chan.val.data, dtype = np.dtype('f4'))
+        self.data = np.frombuffer(chan.val.data, dtype = np.dtype('f4'), count = chan.val.size)
 
     def _on_numpts_update(self, chan):
         print('Numpts received ... = {}'.format(chan.val))
         self.num_pts = chan.val
         self.data_len = self.num_pts
-        
-        self.tmp = np.reshape(self.tmp, (4, self.num_pts))
 
-        self.dataT = self.tmp[0]
-        self.dataX = self.tmp[1]
-        self.dataZ = self.tmp[2]
-        self.dataI = self.tmp[3]
+        tmp = np.reshape(self.data, (4, self.num_pts))
+
+        self.dataT = tmp[0]
+        self.dataX = tmp[1]
+        self.dataZ = tmp[2]
+        self.dataI = tmp[3]
 
         self.data_ready.emit(self)
-       
-        
+
+

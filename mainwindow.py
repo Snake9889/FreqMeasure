@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self, data_source, data_proc_X, data_proc_Z, settings_control):
         super(MainWindow, self).__init__()
-        self.ui = uic.loadUi('MainWindow.ui', self)
+        self.ui = uic.loadUi('MainWindow_New.ui', self)
 
         self.setWindowTitle("Frequency Measurer")
         self.window_str = "None"
@@ -39,12 +39,12 @@ class MainWindow(QMainWindow):
         self.data_proc_Z.data_processed.connect(self.on_data4_ready)
 
         self.controlWidgetX.window_changed_str.connect(self.data_proc_X.on_wind_changed)
-        self.controlWidgetX.groupBox.setTitle("Data_X")
+        self.controlWidgetX.groupBox.setTitle("X Controller")
         self.controlWidgetX.set_str_id("Data_X")
         self.controlWidgetX.scale_changed_obj.connect(self.on_scale_changing)
 
         self.controlWidgetZ.window_changed_str.connect(self.data_proc_Z.on_wind_changed)
-        self.controlWidgetZ.groupBox.setTitle("Data_Z")
+        self.controlWidgetZ.groupBox.setTitle("Z Controller")
         self.controlWidgetZ.set_str_id("Data_Z")
         self.controlWidgetZ.scale_changed_obj.connect(self.on_scale_changing)
 
@@ -93,9 +93,10 @@ class MainWindow(QMainWindow):
         self.customize_plot(self.ui.plotZ)
 
         self.ui.plotFZ.setLabel('left', label_str_z.format("Az"))
+        self.ui.plotFZ.setTitle(label_str_z.format("Az"))
         self.ui.plotFZ.setYRange(0, 0.4)
         self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
-        self.ui.plotFZ.addItem(self.FZ)
+        self.ui.plotFZ.addItem(self.FZ, ignoreBounds = True)
         self.FZ.sigRegionChanged.connect(self.region_Z_changed)
         self.customize_plot(self.ui.plotFZ)
 
@@ -182,18 +183,18 @@ class MainWindow(QMainWindow):
             self.ui.freq_statX.setText('Warning number has unexpected value!')
 
         freq_textX = '{:7.6f}'.format(data_processor.frq_founded)
-        self.ui.freq_showX.display(freq_textX)
+        #self.ui.freq_showX.display(freq_textX)
 
     def on_freq_status_Z(self, data_processor):
         if data_processor.warning == 0:
-            self.ui.freq_statZ.setText('Frequency = {}'.format(data_processor.frq_founded))
+            self.ui.freq_statX.setText('Frequency = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
-            self.ui.freq_statZ.setText(data_processor.warningText)
+            self.ui.freq_statX.setText(data_processor.warningText)
         else:
-            self.ui.freq_statZ.setText('Warning number has unexpected value!')
+            self.ui.freq_statX.setText('Warning number has unexpected value!')
 
         freq_textZ = '{:7.6f}'.format(data_processor.frq_founded)
-        self.ui.freq_showZ.display(freq_textZ)
+        #self.ui.freq_showZ.display(freq_textZ)
 
 
 if __name__ == "__main__":
