@@ -54,6 +54,7 @@ if __name__ == "__main__":
     data_proc_Z = DataProcessor("Z")
     settingsControl = SettingsControl()
     mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
+    mw.setWindowTitle('FrqM {}'.format(bpm_name_parsed))
 
     data_source.data_ready.connect(mw.on_data1_ready)
     data_source.data_ready.connect(mw.on_data3_ready)

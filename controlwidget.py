@@ -8,6 +8,7 @@ Created on Thu Nov 21 17:53:07 2019
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QSettings
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5 import uic
+import os.path
 
 
 class ControlWidget(QWidget):
@@ -21,7 +22,10 @@ class ControlWidget(QWidget):
 
     def __init__(self, parent = None):
         super(ControlWidget, self).__init__(parent)
-        self.ui = uic.loadUi('ControlWidget.ui', self)
+
+        ui_path = os.path.dirname(os.path.abspath(__file__))
+        self.ui = uic.loadUi(os.path.join(ui_path, 'ControlWidget.ui'),self)
+        #self.ui = uic.loadUi('ControlWidget.ui', self)
 
         self.window = "None"
         self.method = "None"

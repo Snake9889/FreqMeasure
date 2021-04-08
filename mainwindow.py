@@ -1,16 +1,12 @@
 # This Python file uses the following encoding: utf-8
 
 import sys
+import os.path
 
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import pyqtSignal
 from PyQt5 import uic
 import pyqtgraph as pg
-
-#from datasources import BPMData
-#from dataprocessor import DataProcessor
-#from settingscontrol import SettingsControl
-
 
 class MainWindow(QMainWindow):
     """   """
@@ -19,9 +15,15 @@ class MainWindow(QMainWindow):
 
     def __init__(self, data_source, data_proc_X, data_proc_Z, settings_control):
         super(MainWindow, self).__init__()
-        self.ui = uic.loadUi('MainWindow_New.ui', self)
 
-        self.setWindowTitle("Frequency Measurer")
+        #self.ui = uic.loadUi(os.path.join(os.path.relpath('MainWindow_New.ui'), 'MainWindow_New.ui'), self)
+        #self.ui = uic.loadUi((os.path.realpath('MainWindow_New.ui'), self)
+        #self.ui = uic.loadUi('MainWindow_New.ui', self)
+
+        ui_path = os.path.dirname(os.path.abspath(__file__))
+        self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow_New.ui'),self)
+
+        #self.setWindowTitle('FrqM {}'.format(data_processor.frq_founded))
         self.window_str = "None"
         self.frq_founded = 0.0
 
@@ -85,20 +87,18 @@ class MainWindow(QMainWindow):
         self.ui.plotFX.setYRange(0, 0.8, padding =0)
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
         self.ui.plotFX.addItem(self.FX)
-        #self.FX.sigRegionChanged.connect(self.region_X_changed)
+        self.FX.sigRegionChangeFinished.connect(self.region_X_changed)
         self.customize_plot(self.ui.plotFX)
 
         self.ui.plotZ.setLabel('left', label_str_z.format("Z"))
         self.ui.plotZ.setYRange(-2, 2)
         self.customize_plot(self.ui.plotZ)
 
-        self.ui.plotFZ.setLabel('left', label_str_z.format("Az"))
+        #self.ui.plotFZ.setLabel('left', label_str_z.format("Az"))
         self.ui.plotFZ.setTitle(label_str_z.format("Az"))
         self.ui.plotFZ.setYRange(0, 0.4)
         self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
-        self.FZ.setZValue(-10)
-        self.ui.plotFZ.addItem(self.FZ, ignoreBounds = True)
-        #self.FZ.sigRegionChanged.connect(self.region_Z_changed)
+        self.ui.plotFZ.addItem(self.FZ)
         self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
         self.customize_plot(self.ui.plotFZ)
 
@@ -141,18 +141,18 @@ class MainWindow(QMainWindow):
         """   """
         self.controlWidgetX.boards = self.FX.getRegion()
         print(self.controlWidgetX.boards)
-        self.controlWidgetX.lboardSBox.setValue(self.controlWidgetX.boards[0])
-        self.controlWidgetX.rboardSBox.setValue(self.controlWidgetX.boards[1])
+
+        x1=float(self.controlWidgetX.boards[0])
+        x2=float(self.controlWidgetX.boards[1])
+
+        self.controlWidgetX.lboardSBox.setValue(min(x1,x2))
+        self.controlWidgetX.rboardSBox.setValue(max(x1,x2))
 
     def region_Z_changed(self):
         """   """
-        print('Sergei')
         self.controlWidgetZ.boards = self.FZ.getRegion()
         print(self.controlWidgetZ.boards)
-        #if self.controlWidgetZ.boards[0]>self.controlWidgetZ.boards[1]:
 
-        #self.controlWidgetZ.lboardSBox.setValue(self.controlWidgetZ.boards[0])
-        #self.controlWidgetZ.rboardSBox.setValue(self.controlWidgetZ.boards[1])
         x1=float(self.controlWidgetZ.boards[0])
         x2=float(self.controlWidgetZ.boards[1])
 
@@ -160,16 +160,19 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.rboardSBox.setValue(max(x1,x2))
 
     def on_exit_button(self):
+        """   """
         print(self, ' Exiting... Bye...')
 
     def on_read_button(self):
+        """   """
         self.settingsControl.read_settings()
 
     def on_save_button(self):
+        """   """
         self.settingsControl.save_settings()
 
     def on_data1_ready(self, data_source):
-        """"   """
+        """   """
         self.data_curve1.setData(data_source.dataT, data_source.dataX)
 
     def on_data3_ready(self, data_source):
@@ -186,22 +189,22 @@ class MainWindow(QMainWindow):
 
     def on_freq_status_X(self, data_processor):
         if data_processor.warning == 0:
-            self.ui.freq_statX.setText('Frequency = {}'.format(data_processor.frq_founded))
+            self.ui.frq_x.setText('Frequency_X = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
-            self.ui.freq_statX.setText(data_processor.warningText)
+            self.ui.frq_x.setText(data_processor.warningText)
         else:
-            self.ui.freq_statX.setText('Warning number has unexpected value!')
+            self.ui.frq_x.setText('Warning number has unexpected value!')
 
         freq_textX = '{:7.6f}'.format(data_processor.frq_founded)
         #self.ui.freq_showX.display(freq_textX)
 
     def on_freq_status_Z(self, data_processor):
         if data_processor.warning == 0:
-            self.ui.freq_statX.setText('Frequency = {}'.format(data_processor.frq_founded))
+            self.ui.frq_z.setText('Frequency_Z = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
-            self.ui.freq_statX.setText(data_processor.warningText)
+            self.ui.frq_z.setText(data_processor.warningText)
         else:
-            self.ui.freq_statX.setText('Warning number has unexpected value!')
+            self.ui.frq_z.setText('Warning number has unexpected value!')
 
         freq_textZ = '{:7.6f}'.format(data_processor.frq_founded)
         #self.ui.freq_showZ.display(freq_textZ)
