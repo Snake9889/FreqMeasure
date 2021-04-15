@@ -5,7 +5,7 @@
 from PyQt5.QtCore import Qt, QObject
 
 import argparse
-from mainwindow import *
+#from mainwindow import *
 
 class TerminalParser(QObject):
     """   """

@@ -8,6 +8,7 @@ Created on Sun Nov 23 04:35:20 2019
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QTimer
 import numpy as np
 import math
+from command_parser import TerminalParser
 
 
 class DataProcessor(QObject):
@@ -18,13 +19,17 @@ class DataProcessor(QObject):
         super(DataProcessor, self).__init__(parent)
 
         self.type_to_process = data_type
+        argument_parser = TerminalParser()
+
+
 
         self.windowType = 'None'
         self.data_len = data_len
-        self.algType = 'None'
+        self.algType = argument_parser.method_name_parsed
         self.window = None
 
         self.regen_wind(self.windowType)
+
 
         self.left_bound = 0.05
         self.right_bound = 0.3
@@ -164,6 +169,9 @@ class DataProcessor(QObject):
 
         ind0 = np.argmax(tmp_x)
 
+        if len(tmp_x) <= 1:
+            print("Your borders too small, change it immediately!")
+
         if ind0 == 0:
             indl = ind0
             indr = ind0 + 1
@@ -171,6 +179,7 @@ class DataProcessor(QObject):
             self.warning = 1
             self.warningText = '[Naff] index of the founded frequency peak is on the left border!'
             print(self.warningText)
+
         elif ind0 == len(tmp_t) - 1:
             indl = ind0 - 1
             indr = ind0

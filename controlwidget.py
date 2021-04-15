@@ -8,6 +8,7 @@ Created on Thu Nov 21 17:53:07 2019
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QSettings
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5 import uic
+from command_parser import TerminalParser
 import os.path
 
 
@@ -25,10 +26,11 @@ class ControlWidget(QWidget):
 
         ui_path = os.path.dirname(os.path.abspath(__file__))
         self.ui = uic.loadUi(os.path.join(ui_path, 'ControlWidget.ui'),self)
-        #self.ui = uic.loadUi('ControlWidget.ui', self)
+
+        argument_parser = TerminalParser()
 
         self.window = "None"
-        self.method = "None"
+        self.method = argument_parser.method_name_parsed
         self.boards = None
         self.lboard = 0.01
         self.rboard = 0.5
@@ -56,7 +58,7 @@ class ControlWidget(QWidget):
         self.buttonGroup.buttonClicked['int'].connect(self.on_method_checked)
         self.lboardSBox.valueChanged.connect(self.on_lboardsbox_changed)
         self.rboardSBox.valueChanged.connect(self.on_rboardsbox_changed)
-        self.scalingBox.currentIndexChanged.connect(self.on_plot_checked)
+        self.log_mod.stateChanged.connect(self.on_plot_checked)
 
     def on_window_checked(self, state):
         """   """
@@ -101,9 +103,7 @@ class ControlWidget(QWidget):
 
     def on_plot_checked(self, state):
         """   """
-        if state == 0:
-            self.scale = "Normal"
-        elif state == 1:
+        if state == Qt.Checked:
             self.scale = "Log_Y"
         else:
             self.scale = "Normal"

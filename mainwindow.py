@@ -56,12 +56,8 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
 
-        #self.settingsControl = settings_control
-        #self.settingsControl.add_object(self.controlWidgetX)
-        #self.settingsControl.add_object(self.controlWidgetZ)
         self.buttonRead.clicked.connect(self.on_read_button)
         self.buttonSave.clicked.connect(self.on_save_button)
-        #self.settingsControl.read_settings()
 
         self.plots_customization()
 
@@ -145,8 +141,8 @@ class MainWindow(QMainWindow):
         x1=float(self.controlWidgetX.boards[0])
         x2=float(self.controlWidgetX.boards[1])
 
-        self.controlWidgetX.lboardSBox.setValue(min(x1,x2))
         self.controlWidgetX.rboardSBox.setValue(max(x1,x2))
+        self.controlWidgetX.lboardSBox.setValue(min(x1,x2))
 
     def region_Z_changed(self):
         """   """
