@@ -1,15 +1,10 @@
 # This Python file uses the following encoding: utf-8
-#
-
 
 from PyQt5.QtCore import Qt, QObject
-
 import argparse
-#from mainwindow import *
 
 class TerminalParser(QObject):
     """   """
-
     def __init__(self, parent=None):
         super(TerminalParser, self).__init__(parent)
 

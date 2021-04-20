@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 21 17:53:07 2019
-
-@author: Вячеслав
-"""
 
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QSettings
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
@@ -62,7 +57,6 @@ class ControlWidget(QWidget):
 
     def on_window_checked(self, state):
         """   """
-
         if state == 0:
             self.window = "None"
         elif state == 1:
@@ -76,8 +70,6 @@ class ControlWidget(QWidget):
 
     def on_method_checked(self, state):
         """   """
-        print('method_state = ', state)
-
         if state == 0:
             self.method = "None"
         elif state == 1:
@@ -123,6 +115,7 @@ class ControlWidget(QWidget):
         self.boards_changed.emit(self.boards)
 
     def set_str_id(self, str):
+        """   """
         self.str_id = str
 
     def save_settings(self):
@@ -145,7 +138,7 @@ class ControlWidget(QWidget):
         settings.sync()
 
     def read_settings(self):
-
+        """   """
         if self.str_id == "Data_X":
 
             settings = QSettings()
@@ -156,7 +149,6 @@ class ControlWidget(QWidget):
             self.rboard = settings.value("rboard", 0.25, type = float)
             self.scale = settings.value("scale", "Normal")
             settings.endGroup()
-
 
             print("lboard type = ", type(self.lboard))
 

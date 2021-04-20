@@ -1,11 +1,7 @@
-#
-#
-#
 
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
 from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout
-
 import numpy as np
 
 

@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 23 04:35:20 2019
-
-@author: Вячеслав
-"""
 
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QTimer
 import numpy as np
@@ -21,15 +16,12 @@ class DataProcessor(QObject):
         self.type_to_process = data_type
         argument_parser = TerminalParser()
 
-
-
         self.windowType = 'None'
         self.data_len = data_len
         self.algType = argument_parser.method_name_parsed
         self.window = None
 
         self.regen_wind(self.windowType)
-
 
         self.left_bound = 0.05
         self.right_bound = 0.3
@@ -95,7 +87,6 @@ class DataProcessor(QObject):
             return
 
         self.data_to_process = self.data_to_process * self.window
-
         self.fftwT = np.fft.rfftfreq(self.data_len, 1.)
         self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process)) / self.data_len
 
@@ -106,15 +97,15 @@ class DataProcessor(QObject):
 
         if self.algType == 'Peak':
             self.frq_founded = self.on_peak_method()
-            print('[', self.algType, '] Freq founded = ', self.frq_founded)
+            #print('[', self.algType, '] Freq founded = ', self.frq_founded)
 
         if self.algType == 'Gassior':
             self.frq_founded = self.on_gassior_method()
-            print('[', self.algType, '] Freq founded = ', self.frq_founded)
+            #print('[', self.algType, '] Freq founded = ', self.frq_founded)
 
         if self.algType == 'Naff':
             self.frq_founded = self.on_naff_method()
-            print('[', self.algType, '] Freq founded = ', self.frq_founded)
+            #print('[', self.algType, '] Freq founded = ', self.frq_founded)
 
         self.data_processed.emit(self)
 
@@ -125,7 +116,7 @@ class DataProcessor(QObject):
 
         tmp_t = self.fftwT[left_ind: right_ind]
         tmp_x = self.fftw_to_process[left_ind: right_ind]
-
+        
         ind = np.argmax(tmp_x)
 
         self.frq_founded = tmp_t[ind]
@@ -206,6 +197,7 @@ class DataProcessor(QObject):
             omega = alpha[it]
 
             if False:
+                ###Need to repair!
                 conv_exp = np.exp(2 * np.pi * complex(0, 1) * self.dataT * omega)
                 falpha[it] = np.abs(np.sum(conv_exp * self.data_to_process))
             else:

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Feb 18 17:48:20 2020
 
-@author: Вячеслав
-"""
 from PyQt5.QtCore import pyqtSignal, Qt, QObject
 
 
@@ -18,6 +14,7 @@ class SettingsControl(QObject):
         self.obj_list = []
 
     def add_object(self, object):
+        """   """
         self.obj_list.append(object)
 
     def save_settings(self):

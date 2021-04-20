@@ -1,12 +1,7 @@
-#
-#
-#
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal, Qt, QObject
-
 import numpy as np
-
 import pycx4.qcda as cda
 
 
@@ -56,11 +51,12 @@ class BPMData(QObject):
         self.bpmChan.valueMeasured.connect(self._on_signal_update)
 
     def _on_signal_update(self, chan):
-        #print('Signal received ... = {}'.format(chan.val))
+        """   """
         print('Signal received ...')
         self.data = np.frombuffer(chan.val.data, dtype = np.dtype('f4'), count = chan.val.size)
 
     def _on_numpts_update(self, chan):
+        """   """
         print('Numpts received ... = {}'.format(chan.val))
         self.num_pts = chan.val
         self.data_len = self.num_pts

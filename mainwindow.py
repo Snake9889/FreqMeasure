@@ -16,10 +16,6 @@ class MainWindow(QMainWindow):
     def __init__(self, data_source, data_proc_X, data_proc_Z, settings_control):
         super(MainWindow, self).__init__()
 
-        #self.ui = uic.loadUi(os.path.join(os.path.relpath('MainWindow_New.ui'), 'MainWindow_New.ui'), self)
-        #self.ui = uic.loadUi((os.path.realpath('MainWindow_New.ui'), self)
-        #self.ui = uic.loadUi('MainWindow_New.ui', self)
-
         ui_path = os.path.dirname(os.path.abspath(__file__))
         self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow_New.ui'),self)
 
@@ -90,7 +86,6 @@ class MainWindow(QMainWindow):
         self.ui.plotZ.setYRange(-2, 2)
         self.customize_plot(self.ui.plotZ)
 
-        #self.ui.plotFZ.setLabel('left', label_str_z.format("Az"))
         self.ui.plotFZ.setTitle(label_str_z.format("Az"))
         self.ui.plotFZ.setYRange(0, 0.4)
         self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
@@ -184,6 +179,7 @@ class MainWindow(QMainWindow):
         self.data_curve4.setData(data_processor.fftwT, data_processor.fftw_to_process)
 
     def on_freq_status_X(self, data_processor):
+        """   """
         if data_processor.warning == 0:
             self.ui.frq_x.setText('Frequency_X = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
@@ -192,9 +188,9 @@ class MainWindow(QMainWindow):
             self.ui.frq_x.setText('Warning number has unexpected value!')
 
         freq_textX = '{:7.6f}'.format(data_processor.frq_founded)
-        #self.ui.freq_showX.display(freq_textX)
 
     def on_freq_status_Z(self, data_processor):
+        """   """
         if data_processor.warning == 0:
             self.ui.frq_z.setText('Frequency_Z = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
@@ -203,7 +199,6 @@ class MainWindow(QMainWindow):
             self.ui.frq_z.setText('Warning number has unexpected value!')
 
         freq_textZ = '{:7.6f}'.format(data_processor.frq_founded)
-        #self.ui.freq_showZ.display(freq_textZ)
 
 
 if __name__ == "__main__":

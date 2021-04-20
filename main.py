@@ -1,5 +1,4 @@
 # This Python file uses the following encoding: utf-8
-#
 
 from PyQt5.QtCore import QCoreApplication, QSettings
 import signal
@@ -13,7 +12,6 @@ from command_parser import TerminalParser
 
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
-
 
 # Allow CTRL+C and/or SIGTERM to kill us (PyQt blocks it otherwise)
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -32,11 +30,6 @@ if __name__ == "__main__":
     argument_parser = TerminalParser()
     bpm_name_parsed = argument_parser.bpm_name_parsed
     data_source = None
-    #simulate_data = 0
-
-    #if simulate_data:
-    #    from datasources import BPMData
-    #    data_source = BPMData(2048)
 
     if bpm_name_parsed == "model":
         from datasources import BPMData
@@ -61,11 +54,8 @@ if __name__ == "__main__":
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
 
-    #self.settingsControl = settings_control
     settingsControl.add_object(mw.controlWidgetX)
     settingsControl.add_object(mw.controlWidgetZ)
-    #self.buttonRead.clicked.connect(mw.on_read_button)
-    #self.buttonSave.clicked.connect(mw.on_save_button)
     settingsControl.read_settings()
 
     data_proc_X.data_processed.connect(mw.on_freq_status_X)
