@@ -198,7 +198,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.frq_z.setText('Warning number has unexpected value!')
 
-        freq_textZ = '{:7.6f}'.format(data_processor.frq_founded)
+        freq_textZ = '{:10.6f}'.format(data_processor.frq_founded)
 
 
 if __name__ == "__main__":

@@ -170,7 +170,11 @@ class ControlWidget(QWidget):
         self.checkWindowBox.setCurrentText(self.window)
         self.window_changed_str.emit(self.window)
 
-        self.scalingBox.setCurrentText(self.scale)
+        #self.log_mod.setCheckState(self.scale)
+        if self.scale == "Normal":
+            self.log_mod.setCheckState(Qt.Unchecked)
+        elif self.scale == "Log_Y":
+            self.log_mod.setCheckState(Qt.Checked)
         self.scale_changed_obj.emit(self)
 
         self.lboardSBox.setValue(self.lboard)
