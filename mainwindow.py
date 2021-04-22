@@ -61,10 +61,10 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)
 
 
-        self.data_curve1 = self.ui.plotX.plot(pen = 'r', title = 'Generated signal X_plot')
+        self.data_curve1 = self.ui.plotX.plot(pen  = 'r', title = 'Generated signal X_plot')
         self.data_curve2 = self.ui.plotFX.plot(pen = 'r', title = 'Fourier Transform X_plot')
-        self.data_curve3 = self.ui.plotZ.plot(pen = 'b', title='Generated signal Z_plot')
-        self.data_curve4 = self.ui.plotFZ.plot(pen = 'b', title='Fourier Transform Z_plot')
+        self.data_curve3 = self.ui.plotZ.plot(pen  = 'b', title = 'Generated signal Z_plot')
+        self.data_curve4 = self.ui.plotFZ.plot(pen = 'b', title = 'Fourier Transform Z_plot')
 
     def plots_customization(self):
         """   """
@@ -75,11 +75,28 @@ class MainWindow(QMainWindow):
         self.customize_plot(self.ui.plotX)
         self.ui.plotX.setYRange(-4, 4)
 
-        self.ui.plotFX.setLabel('left',label_str_x.format("Ax"))
+        self.ui.plotFX.setTitle(label_str_x.format("Ax"))
         self.ui.plotFX.setYRange(0, 0.8, padding =0)
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
         self.ui.plotFX.addItem(self.FX)
         self.FX.sigRegionChangeFinished.connect(self.region_X_changed)
+
+        
+        # vLine = pg.InfiniteLine(angle=90, movable=False)
+        # hLine = pg.InfiniteLine(angle=0, movable=False)
+        # p1.addItem(vLine, ignoreBounds=True)
+        # p1.addItem(hLine, ignoreBounds=True)
+        # vb = p1.vb
+
+    # def mouseMoved(evt):
+        # pos = evt[0]  ## using signal proxy turns original arguments into a tuple
+        # if p1.sceneBoundingRect().contains(pos):
+            # mousePoint = vb.mapSceneToView(pos)
+            # index = int(mousePoint.x())
+            # if index > 0 and index < len(data1):
+                # label.setText("<span style='font-size: 12pt'>x=%0.1f,   <span style='color: red'>y1=%0.1f</span>,   <span style='color: green'>y2=%0.1f</span>" % (mousePoint.x(), data1[index], data2[index]))
+            # vLine.setPos(mousePoint.x())
+            
         self.customize_plot(self.ui.plotFX)
 
         self.ui.plotZ.setLabel('left', label_str_z.format("Z"))
@@ -181,7 +198,8 @@ class MainWindow(QMainWindow):
     def on_freq_status_X(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_x.setText('Frequency_X = {}'.format(data_processor.frq_founded))
+            #self.ui.frq_x.setText('Frequency_X = {}'.format(data_processor.frq_founded))
+            self.ui.frq_x.setText('\u03BD\u2093 = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_x.setText(data_processor.warningText)
         else:
