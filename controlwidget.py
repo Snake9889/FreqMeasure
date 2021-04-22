@@ -26,6 +26,7 @@ class ControlWidget(QWidget):
 
         self.window = "None"
         self.method = argument_parser.method_name_parsed
+        self.bpm = argument_parser.bpm_name_parsed
         self.boards = None
         self.lboard = 0.01
         self.rboard = 0.5
@@ -125,16 +126,15 @@ class ControlWidget(QWidget):
             return
 
         settings = QSettings()
+        settings.beginGroup(self.bpm)
         settings.beginGroup(self.str_id)
         settings.setValue("window", self.window)
         settings.setValue("method", self.method)
         settings.setValue("lboard", self.lboard)
         settings.setValue("rboard", self.rboard)
         settings.setValue("scale", self.scale)
-
-        print("Saved!!!!!")
-
         settings.endGroup()
+        print("Saved!!!!!")
         settings.sync()
 
     def read_settings(self):
@@ -142,6 +142,7 @@ class ControlWidget(QWidget):
         if self.str_id == "Data_X":
 
             settings = QSettings()
+            settings.beginGroup(self.bpm)
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "None")
             self.method = settings.value("method", "None")
@@ -156,6 +157,7 @@ class ControlWidget(QWidget):
 
         elif self.str_id == "Data_Z":
             settings = QSettings()
+            settings.beginGroup(self.bpm)
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "Hann")
             self.method = settings.value("method", "Peak")
@@ -170,7 +172,6 @@ class ControlWidget(QWidget):
         self.checkWindowBox.setCurrentText(self.window)
         self.window_changed_str.emit(self.window)
 
-        #self.log_mod.setCheckState(self.scale)
         if self.scale == "Normal":
             self.log_mod.setCheckState(Qt.Unchecked)
         elif self.scale == "Log_Y":
