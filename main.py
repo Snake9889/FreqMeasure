@@ -1,6 +1,8 @@
 # This Python file uses the following encoding: utf-8
 
-from PyQt5.QtCore import QCoreApplication, QSettings
+from PyQt5.QtCore import QCoreApplication, QSettings, QSize
+from PyQt5.QtGui import QIcon
+
 import signal
 import pyqtgraph as pg
 from mainwindow import *
@@ -46,8 +48,13 @@ if __name__ == "__main__":
     data_proc_X = DataProcessor("X")
     data_proc_Z = DataProcessor("Z")
     settingsControl = SettingsControl()
+
     mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
-    mw.setWindowTitle('FrqM {}'.format(bpm_name_parsed))
+    mw.setWindowTitle('FreqMeter ({})'.format(bpm_name_parsed))
+
+    mw_icon = QIcon()
+    mw_icon.addFile('etc/icons/app_icon_color.png', QSize(32,32))
+    mw.setWindowIcon(mw_icon)
 
     data_source.data_ready.connect(mw.on_data1_ready)
     data_source.data_ready.connect(mw.on_data3_ready)
