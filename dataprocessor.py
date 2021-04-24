@@ -132,6 +132,11 @@ class DataProcessor(QObject):
 
         tmp_t = self.fftwT[left_ind : right_ind]
         tmp_x = self.fftw_to_process[left_ind : right_ind]
+        
+        if len(tmp_t) <= 1:
+            tmp_t = self.fftwT[left_ind - 1 : right_ind + 1]
+            tmp_x = self.fftw_to_process[left_ind - 1 : right_ind + 1]
+        
 
         ind0 = np.argmax(tmp_x)
         indl = ind0 - 1
@@ -157,6 +162,10 @@ class DataProcessor(QObject):
 
         tmp_x = self.fftw_to_process[left_ind: right_ind]
         tmp_t = self.fftwT[left_ind: right_ind]
+
+        if len(tmp_t) <= 1:
+            tmp_t = self.fftwT[left_ind - 1 : right_ind + 1]
+            tmp_x = self.fftw_to_process[left_ind - 1 : right_ind + 1]
 
         ind0 = np.argmax(tmp_x)
 

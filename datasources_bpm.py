@@ -52,12 +52,12 @@ class BPMData(QObject):
 
     def _on_signal_update(self, chan):
         """   """
-        print('Signal received ...')
+        #print('Signal received ...')
         self.data = np.frombuffer(chan.val.data, dtype = np.dtype('f4'), count = chan.val.size)
 
     def _on_numpts_update(self, chan):
         """   """
-        print('Numpts received ... = {}'.format(chan.val))
+        #print('Numpts received ... = {}'.format(chan.val))
         self.num_pts = chan.val
         self.data_len = self.num_pts
 

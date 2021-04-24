@@ -198,25 +198,26 @@ class MainWindow(QMainWindow):
     def on_freq_status_X(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            #self.ui.frq_x.setText('Frequency_X = {}'.format(data_processor.frq_founded))
+            print("Error")
             self.ui.frq_x.setText('\u03BD\u2093 = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
+            print("Error2")
             self.ui.frq_x.setText(data_processor.warningText)
         else:
             self.ui.frq_x.setText('Warning number has unexpected value!')
 
-        freq_textX = '{:7.6f}'.format(data_processor.frq_founded)
+        #freq_textX = '{:7.6f}'.format(data_processor.frq_founded)
 
     def on_freq_status_Z(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_z.setText('Frequency_Z = {}'.format(data_processor.frq_founded))
+            self.ui.frq_z.setText('\u03BD\u2093 = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_z.setText(data_processor.warningText)
         else:
             self.ui.frq_z.setText('Warning number has unexpected value!')
 
-        freq_textZ = '{:10.6f}'.format(data_processor.frq_founded)
+        #freq_textZ = '{:7.6f}'.format(data_processor.frq_founded)
 
 
 if __name__ == "__main__":
