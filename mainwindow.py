@@ -199,7 +199,7 @@ class MainWindow(QMainWindow):
         """   """
         if data_processor.warning == 0:
             print("Error")
-            self.ui.frq_x.setText('\u03BD\u2093 = {}'.format(data_processor.frq_founded))
+            self.ui.frq_x.setText('\u03BD<sub>x</sub> = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             print("Error2")
             self.ui.frq_x.setText(data_processor.warningText)
@@ -211,7 +211,7 @@ class MainWindow(QMainWindow):
     def on_freq_status_Z(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_z.setText('\u03BD\u2093 = {}'.format(data_processor.frq_founded))
+            self.ui.frq_z.setText('\u03BD<sub>z</sub> = {}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_z.setText(data_processor.warningText)
         else:
