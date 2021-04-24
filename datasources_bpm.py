@@ -1,3 +1,5 @@
+#
+#
 
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal, Qt, QObject
@@ -69,5 +71,3 @@ class BPMData(QObject):
         self.dataI = tmp[3]
 
         self.data_ready.emit(self)
-
-

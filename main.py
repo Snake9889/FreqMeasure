@@ -52,8 +52,9 @@ if __name__ == "__main__":
     mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
     mw.setWindowTitle('FreqMeter ({})'.format(bpm_name_parsed))
 
+    icon_path = os.path.dirname(os.path.abspath(__file__))
     mw_icon = QIcon()
-    mw_icon.addFile('etc/icons/app_icon_color.png', QSize(32,32))
+    mw_icon.addFile(os.path.join(icon_path, 'etc/icons/app_icon_color.png'), QSize(32,32))
     mw.setWindowIcon(mw_icon)
 
     data_source.data_ready.connect(mw.on_data1_ready)
