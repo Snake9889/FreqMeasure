@@ -1,7 +1,5 @@
 
-from PyQt5.QtCore import pyqtSignal, Qt, QObject, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QGridLayout
+from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 import numpy as np
 
 
@@ -34,8 +32,8 @@ class BPMData(QObject):
     def generate_bpm_data(self):
         """   """
         self.dataT = np.arange(0, self.data_len, dtype=float)
-        self.dataX = np.sin(2 * np.pi * 0.25 * self.dataT) + 2 * np.cos(2 * np.pi * 0.4 * self.dataT) # Frq = 0.25 + Frq = 0.4
-        self.dataZ = np.exp(-1 * 0.15 * 10.0e-8 * self.dataT * self.dataT) * np.cos(2 * np.pi * 0.1 * self.dataT) # Frq = 0.1, dec = 0.15
+        self.dataX = np.sin(2 * np.pi * 0.25 * self.dataT) + 2 * np.cos(2 * np.pi * 0.4 * self.dataT)  # Frq = 0.25 + Frq = 0.4
+        self.dataZ = np.exp(-1 * 0.15 * 10.0e-8 * self.dataT * self.dataT) * np.cos(2 * np.pi * 0.1 * self.dataT)  # Frq = 0.1, dec = 0.15
         self.dataI = np.ones(self.data_len)
-        self.dataX = self.dataX + 0.3 * np.random.normal(size=self.data_len) # 30% noise
-        self.dataZ = self.dataZ + 0.1 * np.random.normal(size=self.data_len) # 10% noise
+        self.dataX = self.dataX + 0.3 * np.random.normal(size=self.data_len)  # 30% noise
+        self.dataZ = self.dataZ + 0.1 * np.random.normal(size=self.data_len)  # 10% noise

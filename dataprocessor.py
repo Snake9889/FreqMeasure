@@ -10,7 +10,7 @@ class DataProcessor(QObject):
     """   """
     data_processed = pyqtSignal(object)
 
-    def __init__(self, data_type = 'X', data_len = 1024, parent = None):
+    def __init__(self, data_type='X', data_len=1024, parent=None):
         super(DataProcessor, self).__init__(parent)
 
         self.type_to_process = data_type
@@ -97,15 +97,12 @@ class DataProcessor(QObject):
 
         if self.algType == 'Peak':
             self.frq_founded = self.on_peak_method()
-            #print('[', self.algType, '] Freq founded = ', self.frq_founded)
 
         if self.algType == 'Gassior':
             self.frq_founded = self.on_gassior_method()
-            #print('[', self.algType, '] Freq founded = ', self.frq_founded)
 
         if self.algType == 'Naff':
             self.frq_founded = self.on_naff_method()
-            #print('[', self.algType, '] Freq founded = ', self.frq_founded)
 
         self.data_processed.emit(self)
 
@@ -130,13 +127,12 @@ class DataProcessor(QObject):
         left_ind = math.floor(self.data_len * self.left_bound)
         right_ind = math.ceil(self.data_len * self.right_bound)
 
-        tmp_t = self.fftwT[left_ind : right_ind]
-        tmp_x = self.fftw_to_process[left_ind : right_ind]
+        tmp_t = self.fftwT[left_ind: right_ind]
+        tmp_x = self.fftw_to_process[left_ind: right_ind]
         
         if len(tmp_t) <= 1:
-            tmp_t = self.fftwT[left_ind - 1 : right_ind + 1]
-            tmp_x = self.fftw_to_process[left_ind - 1 : right_ind + 1]
-        
+            tmp_t = self.fftwT[left_ind - 1: right_ind + 1]
+            tmp_x = self.fftw_to_process[left_ind - 1: right_ind + 1]
 
         ind0 = np.argmax(tmp_x)
         indl = ind0 - 1
@@ -164,8 +160,8 @@ class DataProcessor(QObject):
         tmp_t = self.fftwT[left_ind: right_ind]
 
         if len(tmp_t) <= 1:
-            tmp_t = self.fftwT[left_ind - 1 : right_ind + 1]
-            tmp_x = self.fftw_to_process[left_ind - 1 : right_ind + 1]
+            tmp_t = self.fftwT[left_ind - 1: right_ind + 1]
+            tmp_x = self.fftw_to_process[left_ind - 1: right_ind + 1]
 
         ind0 = np.argmax(tmp_x)
 
@@ -210,9 +206,9 @@ class DataProcessor(QObject):
                 conv_exp = np.exp(2 * np.pi * complex(0, 1) * self.dataT * omega)
                 falpha[it] = np.abs(np.sum(conv_exp * self.data_to_process))
             else:
-                conv_cos = np.sum( np.cos(2 * np.pi * self.dataT * omega) * self.data_to_process )
-                conv_sin = np.sum( np.sin(2 * np.pi * self.dataT * omega) * self.data_to_process )
-                falpha[it] = np.sqrt( conv_cos * conv_cos + conv_sin * conv_sin )
+                conv_cos = np.sum(np.cos(2 * np.pi * self.dataT * omega) * self.data_to_process)
+                conv_sin = np.sum(np.sin(2 * np.pi * self.dataT * omega) * self.data_to_process)
+                falpha[it] = np.sqrt(conv_cos * conv_cos + conv_sin * conv_sin)
 
         self.alpha = alpha.copy()
         self.falpha = falpha.copy()

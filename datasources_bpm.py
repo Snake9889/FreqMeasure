@@ -1,8 +1,6 @@
 #
 #
-
-from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSignal, Qt, QObject
+from PyQt5.QtCore import pyqtSignal, QObject
 import numpy as np
 import pycx4.qcda as cda
 
@@ -13,7 +11,7 @@ class BPMData(QObject):
 
     bpm_channel_template = "v2cx::hemera:4."
 
-    def __init__(self, bpm_name = '', parent=None):
+    def __init__(self, bpm_name='', parent=None):
         super(BPMData, self).__init__(parent)
 
         self.bpm_name = bpm_name
@@ -29,7 +27,7 @@ class BPMData(QObject):
         self.lboard = 0.01
         self.rboard = 0.5
 
-        if   bpm_name == "bpm01":
+        if bpm_name == "bpm01":
             bpm_channel = 4
         elif bpm_name == "bpm02":
             bpm_channel = 5
@@ -40,13 +38,13 @@ class BPMData(QObject):
         else:
             bpm_channel = -1
 
-        bpm_data_name   = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
+        bpm_data_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
         bpm_numpts_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p10")
 
         print(bpm_data_name)
         print(bpm_numpts_name)
 
-        self.bpmChan        = cda.VChan(bpm_data_name, max_nelems = 8 * 1024 * 4, dtype = cda.DTYPE_INT32)
+        self.bpmChan = cda.VChan(bpm_data_name, max_nelems=8 * 1024 * 4, dtype=cda.DTYPE_INT32)
         self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
 
         self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
@@ -54,12 +52,10 @@ class BPMData(QObject):
 
     def _on_signal_update(self, chan):
         """   """
-        #print('Signal received ...')
-        self.data = np.frombuffer(chan.val.data, dtype = np.dtype('f4'), count = chan.val.size)
+        self.data = np.frombuffer(chan.val.data, dtype=np.dtype('f4'), count=chan.val.size)
 
     def _on_numpts_update(self, chan):
         """   """
-        #print('Numpts received ... = {}'.format(chan.val))
         self.num_pts = chan.val
         self.data_len = self.num_pts
 

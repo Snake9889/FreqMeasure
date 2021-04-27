@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal, Qt, QObject, QSettings
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget
+from PyQt5.QtCore import pyqtSignal, Qt, QSettings
+from PyQt5.QtWidgets import QWidget
 from PyQt5 import uic
 from command_parser import TerminalParser
 import os.path
@@ -16,11 +16,11 @@ class ControlWidget(QWidget):
 
     default_str_id = "Warning"
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(ControlWidget, self).__init__(parent)
 
         ui_path = os.path.dirname(os.path.abspath(__file__))
-        self.ui = uic.loadUi(os.path.join(ui_path, 'ControlWidget.ui'),self)
+        self.ui = uic.loadUi(os.path.join(ui_path, 'ControlWidget.ui'), self)
 
         argument_parser = TerminalParser()
 
@@ -100,14 +100,14 @@ class ControlWidget(QWidget):
             self.scale = "Log_Y"
         else:
             self.scale = "Normal"
-
         self.scale_changed_obj.emit(self)
 
     def on_boards_changed(self):
         """   """
-        if self.lboard == self.rboard:
-            self.lboard = self.lboard
-            self.rboard = self.rboard + 0.01
+        print("here")
+        # if self.rboard == self.lboard:
+        #     self.rboard = self.rboard
+        #     self.lboard = self.lboard - 0.001
 
         self.boards = {
             "lboard": self.lboard,
@@ -146,14 +146,12 @@ class ControlWidget(QWidget):
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "None")
             self.method = settings.value("method", "None")
-            self.lboard = settings.value("lboard", 0.10, type = float)
-            self.rboard = settings.value("rboard", 0.25, type = float)
+            self.lboard = settings.value("lboard", 0.10, type=float)
+            self.rboard = settings.value("rboard", 0.25, type=float)
             self.scale = settings.value("scale", "Normal")
             settings.endGroup()
 
             print("lboard type = ", type(self.lboard))
-
-
 
         elif self.str_id == "Data_Z":
             settings = QSettings()
@@ -161,8 +159,8 @@ class ControlWidget(QWidget):
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "Hann")
             self.method = settings.value("method", "Peak")
-            self.lboard = settings.value("lboard", 0.10, type = float)
-            self.rboard = settings.value("rboard", 0.30, type = float)
+            self.lboard = settings.value("lboard", 0.10, type=float)
+            self.rboard = settings.value("rboard", 0.30, type=float)
             self.scale = settings.value("scale", "Normal")
             settings.endGroup()
 
@@ -188,19 +186,3 @@ class ControlWidget(QWidget):
         elif self.method == "Naff":
             self.useNaffBtn.setChecked(True)
         self.method_changed_str.emit(self.method)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

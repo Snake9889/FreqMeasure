@@ -8,17 +8,14 @@ class TerminalParser(QObject):
     def __init__(self, parent=None):
         super(TerminalParser, self).__init__(parent)
 
-        self.parser = argparse.ArgumentParser(description = 'Startup settings for software')
+        self.parser = argparse.ArgumentParser(description='Startup settings for software')
 
-        self.parser.add_argument('-bn', action = 'store', default = 'model', dest = 'bpm_name',
-                                  help = 'name of bpm, like bpm01 / bpm02 / bpm03 / bpm04 / model, '
+        self.parser.add_argument('-bn', action='store', default='model', dest='bpm_name',
+                                  help='name of bpm, like bpm01 / bpm02 / bpm03 / bpm04 / model, '
                                          'where model - simulated signal.')
-        self.parser.add_argument('-mt', action = 'store', default = 'peak', dest = 'method_name',
-                                  help = 'naff / peak / gass - NAFF / Peak / Gassior detection method.')
+        self.parser.add_argument('-mt', action='store', default='peak', dest='method_name',
+                                  help='naff / peak / gass - NAFF / Peak / Gassior detection method.')
 
         self.results = self.parser.parse_args()
         self.bpm_name_parsed = self.results.bpm_name
         self.method_name_parsed = self.results.method_name
-
-        #print(self.parser.parse_args())
-

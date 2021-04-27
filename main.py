@@ -2,14 +2,10 @@
 
 from PyQt5.QtCore import QCoreApplication, QSettings, QSize
 from PyQt5.QtGui import QIcon
-
 import signal
-import pyqtgraph as pg
 from mainwindow import *
-
 from dataprocessor import DataProcessor
 from settingscontrol import SettingsControl
-from controlwidget import ControlWidget
 from command_parser import TerminalParser
 
 pg.setConfigOption('background', 'w')
@@ -35,11 +31,11 @@ if __name__ == "__main__":
 
     if bpm_name_parsed == "model":
         from datasources import BPMData
-        data_source =  BPMData(2048)
+        data_source = BPMData(2048)
 
     else:
         from datasources_bpm import BPMData
-        data_source = BPMData(bpm_name = bpm_name_parsed)
+        data_source = BPMData(bpm_name=bpm_name_parsed)
 
     if data_source is None:
         print("Data source doesn't exists!!! You can't use this program!!!")
@@ -54,7 +50,7 @@ if __name__ == "__main__":
 
     icon_path = os.path.dirname(os.path.abspath(__file__))
     mw_icon = QIcon()
-    mw_icon.addFile(os.path.join(icon_path, 'etc/icons/app_icon_color.png'), QSize(32,32))
+    mw_icon.addFile(os.path.join(icon_path, 'etc/icons/app_icon_color.png'), QSize(32, 32))
     mw.setWindowIcon(mw_icon)
 
     data_source.data_ready.connect(mw.on_data1_ready)
@@ -68,7 +64,6 @@ if __name__ == "__main__":
 
     data_proc_X.data_processed.connect(mw.on_freq_status_X)
     data_proc_Z.data_processed.connect(mw.on_freq_status_Z)
-
 
     mw.show()
     sys.exit(app.exec_())

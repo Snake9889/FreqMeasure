@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtCore import pyqtSignal, Qt, QObject
+from PyQt5.QtCore import pyqtSignal, QObject
 
 
 class SettingsControl(QObject):
@@ -8,7 +8,7 @@ class SettingsControl(QObject):
     save_data = pyqtSignal(object)
     read_data = pyqtSignal(QObject)
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(SettingsControl, self).__init__(parent)
 
         self.obj_list = []
