@@ -19,3 +19,4 @@ class TerminalParser(QObject):
         self.results = self.parser.parse_args()
         self.bpm_name_parsed = self.results.bpm_name
         self.method_name_parsed = self.results.method_name
+
