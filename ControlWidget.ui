@@ -89,7 +89,7 @@
      <item>
       <widget class="QCheckBox" name="log_mod">
        <property name="text">
-        <string>Log_Mod</string>
+        <string>Log</string>
        </property>
       </widget>
      </item>
