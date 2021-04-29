@@ -143,13 +143,6 @@ class MainWindow(QMainWindow):
 
     def region_X_changed(self):
         """   """
-        #x1 = float(self.FX.getRegion()[0])
-        #x2 = float(self.FX.getRegion()[1])
-        # x1 = float(self.controlWidgetX.boards[0])
-        # x2 = float(self.controlWidgetX.boards[1])
-        # self.controlWidgetX.rboardSBox.setValue(max(x1, x2))
-        # self.controlWidgetX.lboardSBox.setValue(min(x1, x2))
-
         self.controlWidgetX.boards = self.FX.getRegion()
         print(self.controlWidgetX.boards)
 
@@ -195,7 +188,7 @@ class MainWindow(QMainWindow):
     def on_freq_status_X(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_x.setText('\u03BD<sub>x</sub> = {}'.format(data_processor.frq_founded))
+            self.ui.frq_x.setText('\u03BD<sub>x</sub> = {:.5f}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_x.setText(data_processor.warningText)
         else:
@@ -204,7 +197,7 @@ class MainWindow(QMainWindow):
     def on_freq_status_Z(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_z.setText('\u03BD<sub>z</sub> = {}'.format(data_processor.frq_founded))
+            self.ui.frq_z.setText('\u03BD<sub>z</sub> = {:.5f}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_z.setText(data_processor.warningText)
         else:
