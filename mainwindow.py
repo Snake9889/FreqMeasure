@@ -68,6 +68,8 @@ class MainWindow(QMainWindow):
         label_str_z = "<span style=\"color:blue;font-size:16px\">{}</span>"
 
         self.ui.plotX.setLabel('left', label_str_x.format("X"))
+        self.lablx = pg.TextItem("X", (300,300,300), anchor=(0,0))
+        self.ui.plotX.addItem(self.lablx)
         self.customize_plot(self.ui.plotX)
         self.ui.plotX.setYRange(-4, 4)
 

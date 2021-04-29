@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSignal, Qt, QSettings
 from PyQt5.QtWidgets import QWidget
 from PyQt5 import uic
 from command_parser import TerminalParser
+from datasources_bpm import
 import os.path
 
 
@@ -105,10 +106,6 @@ class ControlWidget(QWidget):
     def on_boards_changed(self):
         """   """
         print("here")
-        # if self.rboard == self.lboard:
-        #     self.rboard = self.rboard
-        #     self.lboard = self.lboard - 0.001
-
         self.boards = {
             "lboard": self.lboard,
             "rboard": self.rboard
