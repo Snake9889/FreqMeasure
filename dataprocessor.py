@@ -60,6 +60,8 @@ class DataProcessor(QObject):
         self.left_bound = self.boards.get("lboard", 0.1)
         self.right_bound = self.boards.get("rboard", 0.5)
 
+        #self.data_processed.emit(self)
+
     def regen_wind(self, windowType):
         """   """
         if windowType == 'None':
@@ -113,7 +115,7 @@ class DataProcessor(QObject):
 
         tmp_t = self.fftwT[left_ind: right_ind]
         tmp_x = self.fftw_to_process[left_ind: right_ind]
-        
+
         ind = np.argmax(tmp_x)
 
         self.frq_founded = tmp_t[ind]
@@ -129,7 +131,7 @@ class DataProcessor(QObject):
 
         tmp_t = self.fftwT[left_ind: right_ind]
         tmp_x = self.fftw_to_process[left_ind: right_ind]
-        
+
         if len(tmp_t) <= 1:
             tmp_t = self.fftwT[left_ind - 1: right_ind + 1]
             tmp_x = self.fftw_to_process[left_ind - 1: right_ind + 1]

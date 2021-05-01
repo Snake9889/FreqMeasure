@@ -4,7 +4,6 @@ from PyQt5.QtCore import pyqtSignal, Qt, QSettings
 from PyQt5.QtWidgets import QWidget
 from PyQt5 import uic
 from command_parser import TerminalParser
-from datasources_bpm import
 import os.path
 
 
@@ -14,6 +13,7 @@ class ControlWidget(QWidget):
     method_changed_str = pyqtSignal(str)
     boards_changed = pyqtSignal(object)
     scale_changed_obj = pyqtSignal(object)
+    signature = pyqtSignal(bool)
 
     default_str_id = "Warning"
 
@@ -105,12 +105,27 @@ class ControlWidget(QWidget):
 
     def on_boards_changed(self):
         """   """
-        print("here")
         self.boards = {
             "lboard": self.lboard,
             "rboard": self.rboard
         }
         self.boards_changed.emit(self.boards)
+        self.signature.emit(True)
+
+    def on_boards_changed_ext(self, boards_dict):
+        """   """
+        self.lboard = boards_dict[0]
+        self.rboard = boards_dict[1]
+
+        self.lboardSBox.valueChanged.disconnect()
+        self.lboardSBox.setValue(self.lboard)
+        self.lboardSBox.valueChanged.connect(self.on_lboardsbox_changed)
+
+        self.rboardSBox.valueChanged.disconnect()
+        self.rboardSBox.setValue(self.rboard)
+        self.rboardSBox.valueChanged.connect(self.on_rboardsbox_changed)
+
+        self.on_boards_changed()
 
     def set_str_id(self, str):
         """   """
@@ -136,9 +151,9 @@ class ControlWidget(QWidget):
 
     def read_settings(self):
         """   """
-        if self.str_id == "Data_X":
+        settings = QSettings()
 
-            settings = QSettings()
+        if self.str_id == "Data_X":
             settings.beginGroup(self.bpm)
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "None")
@@ -148,10 +163,7 @@ class ControlWidget(QWidget):
             self.scale = settings.value("scale", "Normal")
             settings.endGroup()
 
-            print("lboard type = ", type(self.lboard))
-
         elif self.str_id == "Data_Z":
-            settings = QSettings()
             settings.beginGroup(self.bpm)
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "Hann")

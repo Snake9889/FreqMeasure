@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
 
         self.controlWidgetX.method_changed_str.connect(self.data_proc_X.on_method_changed)
         self.controlWidgetX.boards_changed.connect(self.data_proc_X.on_boards_changed)
+        #self.controlWidgetX.signature.connect(self.data_proc_X.reprocessing)
 
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
@@ -68,8 +69,8 @@ class MainWindow(QMainWindow):
         label_str_z = "<span style=\"color:blue;font-size:16px\">{}</span>"
 
         self.ui.plotX.setLabel('left', label_str_x.format("X"))
-        self.lablx = pg.TextItem("X", (300,300,300), anchor=(0,0))
-        self.ui.plotX.addItem(self.lablx)
+        #self.lablx = pg.TextItem("X", (300,300,300), anchor=(0,0))
+        #self.ui.plotX.addItem(self.lablx)
         self.customize_plot(self.ui.plotX)
         self.ui.plotX.setYRange(-4, 4)
 
@@ -145,19 +146,11 @@ class MainWindow(QMainWindow):
 
     def region_X_changed(self):
         """   """
-        self.controlWidgetX.boards = self.FX.getRegion()
-        print(self.controlWidgetX.boards)
+        self.controlWidgetX.on_boards_changed_ext(self.FX.getRegion())
 
     def region_Z_changed(self):
         """   """
-        self.controlWidgetZ.boards = self.FZ.getRegion()
-        print(self.controlWidgetZ.boards)
-
-        # x1 = float(self.controlWidgetZ.boards[0])
-        # x2 = float(self.controlWidgetZ.boards[1])
-        #
-        # self.controlWidgetZ.rboardSBox.setValue(max(x1, x2))
-        # self.controlWidgetZ.lboardSBox.setValue(min(x1, x2))
+        self.controlWidgetZ.on_boards_changed_ext(self.FZ.getRegion())
 
     def on_exit_button(self):
         """   """

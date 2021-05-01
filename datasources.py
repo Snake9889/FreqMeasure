@@ -37,3 +37,7 @@ class BPMData(QObject):
         self.dataI = np.ones(self.data_len)
         self.dataX = self.dataX + 0.3 * np.random.normal(size=self.data_len)  # 30% noise
         self.dataZ = self.dataZ + 0.1 * np.random.normal(size=self.data_len)  # 10% noise
+
+    def update_from_borders(self, signature):
+        if signature == True:
+            self.data_ready.emit(self)

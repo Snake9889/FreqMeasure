@@ -67,3 +67,8 @@ class BPMData(QObject):
         self.dataI = tmp[3]
 
         self.data_ready.emit(self)
+
+    def update_from_borders(self, signature):
+        if signature == True:
+            self.data_ready.emit(self)
+
