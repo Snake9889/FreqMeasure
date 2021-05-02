@@ -97,6 +97,7 @@ class MainWindow(QMainWindow):
         self.customise_label(plot, pg.TextItem(), label_str_x.format("Ax"))
 
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
+        self.FX.setBounds([0,0.5])
         plot.addItem(self.FX)
         self.FX.sigRegionChangeFinished.connect(self.region_X_changed)
 
@@ -106,6 +107,7 @@ class MainWindow(QMainWindow):
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Az"))
 
         self.FZ = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetZ.rboard])
+        self.FZ.setBounds([0,0.5])
         plot.addItem(self.FZ)
         self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
 
