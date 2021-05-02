@@ -24,7 +24,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
@@ -32,12 +32,12 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="spacing">
-         <number>0</number>
+         <number>4</number>
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="spacing">
-           <number>0</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="PlotWidget" name="plotX">
@@ -65,6 +65,18 @@
             <property name="styleSheet">
              <string notr="true"/>
             </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="lineWidth">
+             <number>1</number>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::AdjustIgnored</enum>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
            </widget>
           </item>
           <item>
@@ -89,6 +101,12 @@
               <width>16777215</width>
               <height>250</height>
              </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="lineWidth">
+             <number>1</number>
             </property>
            </widget>
           </item>
@@ -117,8 +135,24 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <property name="spacing">
-           <number>0</number>
+           <number>4</number>
           </property>
+          <item>
+           <widget class="QLabel" name="nu_x_label">
+            <property name="font">
+             <font>
+              <family>DejaVu Sans</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
+            <property name="text">
+             <string>nuX=</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QLabel" name="frq_x">
             <property name="font">
@@ -126,8 +160,43 @@
               <pointsize>18</pointsize>
              </font>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 0, 0);</string>
+            </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>0.00000</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="nu_z_label">
+            <property name="font">
+             <font>
+              <family>DejaVu Sans</family>
+              <pointsize>18</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 255);</string>
+            </property>
+            <property name="text">
+             <string>nuZ=</string>
             </property>
            </widget>
           </item>
@@ -138,8 +207,11 @@
               <pointsize>18</pointsize>
              </font>
             </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(0, 0, 255);</string>
+            </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>0.00000</string>
             </property>
            </widget>
           </item>
@@ -150,7 +222,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="spacing">
-         <number>3</number>
+         <number>4</number>
         </property>
         <item>
          <widget class="ControlWidget" name="controlWidgetX" native="true">
@@ -212,7 +284,7 @@
      <x>0</x>
      <y>0</y>
      <width>687</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">

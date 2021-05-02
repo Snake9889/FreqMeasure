@@ -90,12 +90,12 @@ class DataProcessor(QObject):
 
         self.data_to_process = self.data_to_process * self.window
         self.fftwT = np.fft.rfftfreq(self.data_len, 1.)
-        self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process)) / self.data_len
+        self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
 
         if self.algType == 'None':
             self.frq_founded = 0.0
             self.warning = 0
-            self.warningText = 'No warnings!'
+            self.warningText = 'OK!'
 
         if self.algType == 'Peak':
             self.frq_founded = self.on_peak_method()
@@ -120,7 +120,7 @@ class DataProcessor(QObject):
 
         self.frq_founded = tmp_t[ind]
         self.warning = 0
-        self.warningText = 'No warnings!'
+        self.warningText = 'OK!'
 
         return self.frq_founded
 
@@ -143,13 +143,13 @@ class DataProcessor(QObject):
         if ind0 == 0 or ind0 == len(tmp_t) - 1:
             self.frq_founded = self.on_peak_method()
             self.warning = 1
-            self.warningText = '[Gassior] index of the founded frequency peak is on the left or right border!'
+            self.warningText = 'Borders!'
             print(self.warningText)
         else:
             self.frq_founded = tmp_t[ind0] + (tmp_x[indr] - tmp_x[indl]) /\
                             (2 * self.data_len * (2 * tmp_x[ind0] - tmp_x[indl] - tmp_x[indr]))
             self.warning = 0
-            self.warningText = 'No warnings!'
+            self.warningText = 'OK!'
 
         return self.frq_founded
 
@@ -175,7 +175,7 @@ class DataProcessor(QObject):
             indr = ind0 + 1
 
             self.warning = 1
-            self.warningText = '[Naff] index of the founded frequency peak is on the left border!'
+            self.warningText = 'Borders!'
             print(self.warningText)
 
         elif ind0 == len(tmp_t) - 1:
@@ -183,14 +183,14 @@ class DataProcessor(QObject):
             indr = ind0
 
             self.warning = 1
-            self.warningText = '[Naff] index of the founded frequency peak is on the right border!'
+            self.warningText = 'Borders!'
             print(self.warningText)
         else:
             indl = ind0 - 1
             indr = ind0 + 1
 
             self.warning = 0
-            self.warningText = 'No warnings!'
+            self.warningText = 'OK!'
 
         self.frq_founded = tmp_t[ind0]
         frql = tmp_t[indl]

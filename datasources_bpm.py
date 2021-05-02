@@ -68,7 +68,10 @@ class BPMData(QObject):
 
         self.data_ready.emit(self)
 
-    def update_from_borders(self, signature):
+    def force_data_ready(self, signature):
+        """   """
         if signature == True:
-            self.data_ready.emit(self)
-
+            if self.data is not None:
+                self.data_ready.emit(self)
+            else:
+                pass

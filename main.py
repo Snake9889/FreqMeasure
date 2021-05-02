@@ -20,7 +20,7 @@ if __name__ == "__main__":
     import sys
 
     QCoreApplication.setOrganizationName("Denisov")
-    QCoreApplication.setApplicationName("Freq_Online")
+    QCoreApplication.setApplicationName("BTMS")
     QSettings.setDefaultFormat(QSettings.IniFormat)
 
     app = QApplication(sys.argv)
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     settingsControl = SettingsControl()
 
     mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
-    mw.setWindowTitle('FreqMeter ({})'.format(bpm_name_parsed))
+    mw.setWindowTitle('BTMS ({})'.format(bpm_name_parsed))
 
     icon_path = os.path.dirname(os.path.abspath(__file__))
     mw_icon = QIcon()
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
 
+    settingsControl.add_object(mw)
     settingsControl.add_object(mw.controlWidgetX)
     settingsControl.add_object(mw.controlWidgetZ)
     settingsControl.read_settings()
@@ -65,8 +66,8 @@ if __name__ == "__main__":
     data_proc_X.data_processed.connect(mw.on_freq_status_X)
     data_proc_Z.data_processed.connect(mw.on_freq_status_Z)
 
-    mw.controlWidgetX.signature.connect(data_source.update_from_borders)
-    mw.controlWidgetZ.signature.connect(data_source.update_from_borders)
+    mw.controlWidgetX.signature.connect(data_source.force_data_ready)
+    mw.controlWidgetZ.signature.connect(data_source.force_data_ready)
 
     mw.show()
     sys.exit(app.exec_())

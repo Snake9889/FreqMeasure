@@ -2,7 +2,7 @@
 
 import os.path
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QRectF, Qt, QSettings
 from PyQt5 import uic
 import pyqtgraph as pg
 
@@ -18,7 +18,11 @@ class MainWindow(QMainWindow):
         self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow.ui'), self)
 
         self.window_str = "None"
-        self.frq_founded = 0.0
+
+        self.x_rect = None
+        self.fx_rect = None
+        self.z_rect = None
+        self.fz_rect = None
 
         self.data_source = data_source
 
@@ -45,7 +49,6 @@ class MainWindow(QMainWindow):
 
         self.controlWidgetX.method_changed_str.connect(self.data_proc_X.on_method_changed)
         self.controlWidgetX.boards_changed.connect(self.data_proc_X.on_boards_changed)
-        #self.controlWidgetX.signature.connect(self.data_proc_X.reprocessing)
 
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
@@ -53,33 +56,58 @@ class MainWindow(QMainWindow):
         self.buttonRead.clicked.connect(self.on_read_button)
         self.buttonSave.clicked.connect(self.on_save_button)
 
-        self.plots_customization()
-
         self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
         self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)
 
-        self.data_curve1 = self.ui.plotX.plot(pen='r', title='Generated signal X_plot')
+        self.ui.nu_x_label.setText('\u03BD<sub>x</sub> = ')
+        self.ui.nu_z_label.setText('\u03BD<sub>z</sub> = ')
+
+        self.plots_customization()
+
+        self.data_curve1 = self.ui.plotX.plot(pen='r', title='X_plot')
         self.data_curve2 = self.ui.plotFX.plot(pen='r', title='Fourier Transform X_plot')
-        self.data_curve3 = self.ui.plotZ.plot(pen='b', title='Generated signal Z_plot')
+        self.data_curve3 = self.ui.plotZ.plot(pen='b', title='Z_plot')
         self.data_curve4 = self.ui.plotFZ.plot(pen='b', title='Fourier Transform Z_plot')
+
+    @staticmethod
+    def customise_label(plot, text_item, html_str):
+        """   """
+        plot_vb = plot.getViewBox()
+        text_item.setHtml(html_str)
+        text_item.setParentItem(plot_vb)
 
     def plots_customization(self):
         """   """
-        label_str_x = "<span style=\"color:red;font-size:16px\">{}</span>"
+        label_str_x = "<span style=\"color:red; font-size:16px\">{}</span>"
         label_str_z = "<span style=\"color:blue;font-size:16px\">{}</span>"
 
-        self.ui.plotX.setLabel('left', label_str_x.format("X"))
-        #self.lablx = pg.TextItem("X", (300,300,300), anchor=(0,0))
-        #self.ui.plotX.addItem(self.lablx)
-        self.customize_plot(self.ui.plotX)
-        self.ui.plotX.setYRange(-4, 4)
+        plot = self.ui.plotX
+        self.customize_plot(plot)
+        #plot.setLabel('left', label_str_x.format("X"))
+        self.customise_label(plot, pg.TextItem(), label_str_x.format("X"))
 
-        self.ui.plotFX.setTitle(label_str_x.format("Ax"))
-        self.ui.plotFX.setYRange(0, 0.8, padding=0)
+        plot = self.ui.plotZ
+        self.customize_plot(plot)
+        #plot.setLabel('left', label_str_z.format("Z"))
+        self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
+
+        plot = self.ui.plotFX
+        self.customize_plot(plot)
+        #plot.setLabel('left', label_str_x.format("Ax"))
+        self.customise_label(plot, pg.TextItem(), label_str_x.format("Ax"))
+
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
-        self.ui.plotFX.addItem(self.FX)
+        plot.addItem(self.FX)
         self.FX.sigRegionChangeFinished.connect(self.region_X_changed)
-        self.customize_plot(self.ui.plotFX)
+
+        plot = self.ui.plotFZ
+        self.customize_plot(plot)
+        #plot.setLabel('left', label_str_z.format("Az"))
+        self.customise_label(plot, pg.TextItem(), label_str_z.format("Az"))
+
+        self.FZ = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetZ.rboard])
+        plot.addItem(self.FZ)
+        self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
 
         # vLine = pg.InfiniteLine(angle=90, movable=False)
         # hLine = pg.InfiniteLine(angle=0, movable=False)
@@ -95,18 +123,6 @@ class MainWindow(QMainWindow):
             # if index > 0 and index < len(data1):
                 # label.setText("<span style='font-size: 12pt'>x=%0.1f,   <span style='color: red'>y1=%0.1f</span>,   <span style='color: green'>y2=%0.1f</span>" % (mousePoint.x(), data1[index], data2[index]))
             # vLine.setPos(mousePoint.x())
-
-
-        self.ui.plotZ.setLabel('left', label_str_z.format("Z"))
-        self.ui.plotZ.setYRange(-2, 2)
-        self.customize_plot(self.ui.plotZ)
-
-        self.ui.plotFZ.setTitle(label_str_z.format("Az"))
-        self.ui.plotFZ.setYRange(0, 0.4)
-        self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
-        self.ui.plotFZ.addItem(self.FZ)
-        self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
-        self.customize_plot(self.ui.plotFZ)
 
     @staticmethod
     def customize_plot(plot):
@@ -167,36 +183,71 @@ class MainWindow(QMainWindow):
     def on_data1_ready(self, data_source):
         """   """
         self.data_curve1.setData(data_source.dataT, data_source.dataX)
+        self.x_rect = self.ui.plotX.viewRange()
 
     def on_data3_ready(self, data_source):
         """   """
         self.data_curve3.setData(data_source.dataT, data_source.dataZ)
+        self.z_rect = self.ui.plotZ.viewRange()
 
     def on_data2_ready(self, data_processor):
         """   """
         self.data_curve2.setData(data_processor.fftwT, data_processor.fftw_to_process)
+        self.fx_rect = self.ui.plotFX.viewRange()
 
     def on_data4_ready(self, data_processor):
         """   """
         self.data_curve4.setData(data_processor.fftwT, data_processor.fftw_to_process)
+        self.fz_rect = self.ui.plotFZ.viewRange()
 
     def on_freq_status_X(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_x.setText('\u03BD<sub>x</sub> = {:.5f}'.format(data_processor.frq_founded))
+            self.ui.frq_x.setText('{:.5f}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_x.setText(data_processor.warningText)
         else:
-            self.ui.frq_x.setText('Warning number has unexpected value!')
+            self.ui.frq_x.setText('Unexpected value!')
 
     def on_freq_status_Z(self, data_processor):
         """   """
         if data_processor.warning == 0:
-            self.ui.frq_z.setText('\u03BD<sub>z</sub> = {:.5f}'.format(data_processor.frq_founded))
+            self.ui.frq_z.setText('{:.5f}'.format(data_processor.frq_founded))
         elif data_processor.warning == 1:
             self.ui.frq_z.setText(data_processor.warningText)
         else:
-            self.ui.frq_z.setText('Warning number has unexpected value!')
+            self.ui.frq_z.setText('Unexpected value!')
+
+    def save_settings(self):
+        """   """
+        settings = QSettings()
+        #settings.beginGroup(self.bpm)
+        settings.beginGroup('Plots')
+        settings.setValue("x_zoom", self.x_rect)
+        settings.setValue("z_zoom", self.z_rect)
+        settings.setValue("fx_zoom", self.fx_rect)
+        settings.setValue("fz_zoom", self.fz_rect)
+        settings.endGroup()
+        settings.sync()
+
+    def read_settings(self):
+        """   """
+        settings = QSettings()
+        #settings.beginGroup(self.bpm)
+        settings.beginGroup('Plots')
+        #rect_def = QRectF(0, 0, 1, 1)
+        rect_def = [[0, 1], [0, 1]]
+        self.x_rect = settings.value("x_zoom", rect_def)
+        self.fx_rect = settings.value("fx_zoom", rect_def)
+        self.z_rect = settings.value("z_zoom", rect_def)
+        self.fz_rect = settings.value("fz_zoom", rect_def)
+        settings.endGroup()
+
+        self.ui.plotX.setRange(xRange=self.x_rect[0], yRange=self.x_rect[1])
+        self.ui.plotZ.setRange(xRange=self.z_rect[0], yRange=self.z_rect[1])
+
+        self.ui.plotFX.setRange(xRange=self.fx_rect[0], yRange=self.fx_rect[1])
+        self.ui.plotFZ.setRange(xRange=self.fz_rect[0], yRange=self.fz_rect[1])
 
 # if __name__ == "__main__":
 #     app = QApplication([])
