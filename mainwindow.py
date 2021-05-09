@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt, QSettings
 from PyQt5 import uic
 import pyqtgraph as pg
-
+from helpwidget import HelpWidget
 
 class MainWindow(QMainWindow):
     """   """
@@ -18,6 +18,8 @@ class MainWindow(QMainWindow):
         self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow.ui'), self)
 
         self.window_str = "None"
+
+        self.images_list = []
 
         self.x_rect = None
         self.fx_rect = None
@@ -55,6 +57,9 @@ class MainWindow(QMainWindow):
 
         self.buttonRead.clicked.connect(self.on_read_button)
         self.buttonSave.clicked.connect(self.on_save_button)
+
+        self.help_widget = HelpWidget(os.path.join(ui_path, 'etc/icons/capture.jpg'))
+        self.actionHelp.triggered.connect(self.help_widget.show)
 
         self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
         self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)
