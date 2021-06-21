@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
         self.buttonRead.clicked.connect(self.on_read_button)
         self.buttonSave.clicked.connect(self.on_save_button)
 
-        self.help_widget = HelpWidget(os.path.join(ui_path, 'etc/icons/capture.jpg'))
+        self.help_widget = HelpWidget(os.path.join(ui_path, 'etc/icons/Help_1.png'))
         self.actionHelp.triggered.connect(self.help_widget.show)
 
         self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
@@ -88,17 +88,14 @@ class MainWindow(QMainWindow):
 
         plot = self.ui.plotX
         self.customize_plot(plot)
-        #plot.setLabel('left', label_str_x.format("X"))
         self.customise_label(plot, pg.TextItem(), label_str_x.format("X"))
 
         plot = self.ui.plotZ
         self.customize_plot(plot)
-        #plot.setLabel('left', label_str_z.format("Z"))
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
 
         plot = self.ui.plotFX
         self.customize_plot(plot)
-        #plot.setLabel('left', label_str_x.format("Ax"))
         self.customise_label(plot, pg.TextItem(), label_str_x.format("Ax"))
 
         self.FX = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetX.rboard])
@@ -108,7 +105,6 @@ class MainWindow(QMainWindow):
 
         plot = self.ui.plotFZ
         self.customize_plot(plot)
-        #plot.setLabel('left', label_str_z.format("Az"))
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Az"))
 
         self.FZ = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetZ.rboard])
@@ -228,7 +224,6 @@ class MainWindow(QMainWindow):
     def save_settings(self):
         """   """
         settings = QSettings()
-        #settings.beginGroup(self.bpm)
         settings.beginGroup('Plots')
         settings.setValue("x_zoom", self.x_rect)
         settings.setValue("z_zoom", self.z_rect)
@@ -240,9 +235,7 @@ class MainWindow(QMainWindow):
     def read_settings(self):
         """   """
         settings = QSettings()
-        #settings.beginGroup(self.bpm)
         settings.beginGroup('Plots')
-        #rect_def = QRectF(0, 0, 1, 1)
         rect_def = [[0, 1], [0, 1]]
         self.x_rect = settings.value("x_zoom", rect_def)
         self.fx_rect = settings.value("fx_zoom", rect_def)
