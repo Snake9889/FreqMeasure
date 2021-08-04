@@ -3,50 +3,59 @@
 from PyQt5.QtCore import pyqtSignal, QObject
 import numpy as np
 import pycx4.qcda as cda
-from BPM_template import BPMTemplate
+from datasources import BPMData
 
 
-class BPMData(BPMTemplate):
+class BPMData(QObject):
     """   """
-    #data_ready = pyqtSignal(object)
+    data_ready = pyqtSignal(object)
 
     bpm_channel_template = "v2cx::hemera:4."
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMData, self).__init__(parent)
 
-        # self.bpm_name = bpm_name
-        # self.num_pts = 1024
-        # self.data_len = self.num_pts
+        BPM1 = BPMData(2048)
 
-        # self.data = None
-        # self.dataT = None
-        # self.dataX = None
-        # self.dataZ = None
-        # self.dataI = None
+        # if bpm_name == "bpm01":
+            # bpm_channel = 4
+        # elif bpm_name == "bpm02":
+            # bpm_channel = 5
+        # elif bpm_name == "bpm03":
+            # bpm_channel = 6
+        # elif bpm_name == "bpm04":
+            # bpm_channel = 7
+        # elif bpm_name == "all":
+            # bpm_channel = 8
+        # else:
+            # bpm_channel = -1
 
-        # self.lboard = 0.01
-        # self.rboard = 0.5
+            
 
-        if bpm_name == "bpm01":
-            bpm_channel = 4
-        elif bpm_name == "bpm02":
-            bpm_channel = 5
-        elif bpm_name == "bpm03":
-            bpm_channel = 6
-        elif bpm_name == "bpm04":
-            bpm_channel = 7
-        else:
-            bpm_channel = -1
+        # bpm_data_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
+        # bpm_numpts_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p10")
 
+        # print(bpm_data_name)
+        # print(bpm_numpts_name)
+
+        # self.bpmChan = cda.VChan(bpm_data_name, max_nelems=8 * 1024 * 4, dtype=cda.DTYPE_INT32)
+        # self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
+        
+
+        # self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
+        # self.bpmChan.valueMeasured.connect(self._on_signal_update)
+
+        
+
+    def receiving_data(self, bpm_channel):
         bpm_data_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
         bpm_numpts_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p10")
-
         print(bpm_data_name)
         print(bpm_numpts_name)
 
         self.bpmChan = cda.VChan(bpm_data_name, max_nelems=8 * 1024 * 4, dtype=cda.DTYPE_INT32)
         self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
+        # return (self.bpmChan, self.bpmChan_numpts)
 
         self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
         self.bpmChan.valueMeasured.connect(self._on_signal_update)
@@ -73,9 +82,8 @@ class BPMData(BPMTemplate):
 
     def force_data_ready(self, signature):
         """   """
-        # if signature == True:
-            # if self.dataT is not None:
-                # self.data_ready.emit(self)
-            # else:
-                # pass
-        super().force_data_ready(signature)
+        if signature == True:
+            if self.data is not None:
+                self.data_ready.emit(self)
+            else:
+                pass

@@ -1,23 +1,24 @@
 
 from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 import numpy as np
+from BPM_template import BPMTemplate
 
 
-class BPMData(QObject):
+class BPMData(BPMTemplate):
     """   """
-    data_ready = pyqtSignal(object)
+    # data_ready = pyqtSignal(object)
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMData, self).__init__(parent)
 
-        self.bpm_name = bpm_name
-        self.num_pts = 1024
-        self.data_len = self.num_pts
+        # self.bpm_name = bpm_name
+        # self.num_pts = 1024
+        # self.data_len = self.num_pts
 
-        self.dataT = None
-        self.dataX = None
-        self.dataZ = None
-        self.dataI = None
+        # self.dataT = None
+        # self.dataX = None
+        # self.dataZ = None
+        # self.dataI = None
 
         self.def_time = 1000
         self.timer = QTimer()
@@ -40,8 +41,9 @@ class BPMData(QObject):
 
     def force_data_ready(self, signature):
         """   """
-        if signature == True:
-            if self.dataT is not None:
-                self.data_ready.emit(self)
-            else:
-                pass
+        # if signature == True:
+            # if self.dataT is not None:
+                # self.data_ready.emit(self)
+            # else:
+                # pass
+        super().force_data_ready(signature)

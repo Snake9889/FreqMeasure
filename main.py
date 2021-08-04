@@ -31,7 +31,11 @@ if __name__ == "__main__":
 
     if bpm_name_parsed == "model":
         from datasources import BPMData
-        data_source = BPMData(2048)
+        data_source = BPMData()
+
+    elif bpm_name_parsed == "all":
+        from datasources_all import BPMDataAll
+        data_source = BPMDataAll()
 
     else:
         from datasources_bpm import BPMData
