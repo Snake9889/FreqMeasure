@@ -1,89 +1,93 @@
 #
 #
-from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 import numpy as np
 import pycx4.qcda as cda
 from datasources import BPMData
+from BPM_template import BPMTemplate
 
 
-class BPMData(QObject):
+class BPMData(BPMTemplate):
     """   """
-    data_ready = pyqtSignal(object)
-
-    bpm_channel_template = "v2cx::hemera:4."
+    # data_ready = pyqtSignal(object)
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMData, self).__init__(parent)
 
-        BPM1 = BPMData(2048)
+        self.hesh = [0, 0, 0, 0]
+        self.control = (1, 1, 1, 1)
+        self.l = [0, 0, 0, 0]
 
-        # if bpm_name == "bpm01":
-            # bpm_channel = 4
-        # elif bpm_name == "bpm02":
-            # bpm_channel = 5
-        # elif bpm_name == "bpm03":
-            # bpm_channel = 6
-        # elif bpm_name == "bpm04":
-            # bpm_channel = 7
-        # elif bpm_name == "all":
-            # bpm_channel = 8
-        # else:
-            # bpm_channel = -1
+        BPM1 = BPMData("bpm01")
+        BPM2 = BPMData("bpm02")
+        BPM3 = BPMData("bpm03")
+        BPM4 = BPMData("bpm04")
 
-            
+        BPM1.data_ready.connect(self.timeshift)
+        BPM2.data_ready.connect(self.timeshift)
+        BPM3.data_ready.connect(self.timeshift)
+        BPM4.data_ready.connect(self.timeshift)
 
-        # bpm_data_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
-        # bpm_numpts_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p10")
+    def timeshift(self, BPM):
+        """   """
+        self.def_time = 30
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.on_timer_update)
+        self.timer.start(self.def_time)
 
-        # print(bpm_data_name)
-        # print(bpm_numpts_name)
+        if BPM.bpm_name == "bpm01":
+            hesh[0] = 1
 
-        # self.bpmChan = cda.VChan(bpm_data_name, max_nelems=8 * 1024 * 4, dtype=cda.DTYPE_INT32)
-        # self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
+        elif BPM.bpm_name == "bpm02":
+            hesh[1] = 1
+
+        elif BPM.bpm_name == "bpm03":
+            hesh[2] = 1
+
+        elif BPM.bpm_name == "bpm04":
+            hesh[3] = 1
+
+        else:
+            pass
+
+        if self.control = (hesh[0], hesh[1], hesh[2], hesh[3]):
+            self.controller()
+
+    def controller(self):
+        """   """
+        self.l = [len(BPM1.dataT), len(BPM2.dataT), len(BPM3.dataT), len(BPM4.dataT)]
+        if all(self.l[i] == self.l[i+1] for i in range(len(self.l)-1)):
+            self.reshaping_data()
+        else:
+            self.l = [0, 0, 0, 0]
+            pass
         
 
-        # self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
-        # self.bpmChan.valueMeasured.connect(self._on_signal_update)
+    def on_timer_update(self):
+        """   """
+        hesh = np.zeros(4)
+        pass
 
+    def reshaping_data(self):
+        """   """
+        self.dataT = reshaping_arrays(BPM1.dataT, BPM2.dataT, BPM3.dataT, BPM4.dataT)
+        self.dataX = reshaping_arrays(BPM1.dataX, BPM2.dataX, BPM3.dataX, BPM4.dataX)
+        self.dataZ = reshaping_arrays(BPM1.dataZ, BPM2.dataZ, BPM3.dataZ, BPM4.dataZ)
+        self.dataI = reshaping_arrays(BPM1.dataI, BPM2.dataI, BPM3.dataI, BPM4.dataI)
         
-
-    def receiving_data(self, bpm_channel):
-        bpm_data_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
-        bpm_numpts_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p10")
-        print(bpm_data_name)
-        print(bpm_numpts_name)
-
-        self.bpmChan = cda.VChan(bpm_data_name, max_nelems=8 * 1024 * 4, dtype=cda.DTYPE_INT32)
-        self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
-        # return (self.bpmChan, self.bpmChan_numpts)
-
-        self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
-        self.bpmChan.valueMeasured.connect(self._on_signal_update)
-
-    def _on_signal_update(self, chan):
-        """   """
-        self.data = np.frombuffer(chan.val.data, dtype=np.dtype('f4'), count=chan.val.size)
-
-    def _on_numpts_update(self, chan):
-        """   """
-        self.num_pts = chan.val
-        self.data_len = self.num_pts
-
-        tmp = np.reshape(self.data, (4, self.num_pts))
-
-        self.dataT = tmp[0]
-        self.dataX = tmp[1]
-        self.dataZ = tmp[2]
-        self.dataI = tmp[3]
-
         self.data_ready.emit(self)
 
-        
+    def reshaping_arrays(self, M1, M2, M3, M4):
+        """   """
+        newMass = np.zeros(len(M1)*4)
+        for i in range(len(M1)):
+            newMass[4*i] = M1[i]
+            newMass[4*i + 1] = M2[i]
+            newMass[4*i + 2] = M3[i]
+            newMass[4*i + 3] = M4[i]
+
+        return(newMass)
 
     def force_data_ready(self, signature):
         """   """
-        if signature == True:
-            if self.data is not None:
-                self.data_ready.emit(self)
-            else:
-                pass
+        super().force_data_ready(signature)
