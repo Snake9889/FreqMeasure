@@ -3,91 +3,115 @@
 from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 import numpy as np
 import pycx4.qcda as cda
-from datasources import BPMData
+
 from BPM_template import BPMTemplate
+from datasources_bpm import BPMData
+#from datasources import BPMData
 
 
-class BPMData(BPMTemplate):
+class BPMDataAll(BPMTemplate):
     """   """
     # data_ready = pyqtSignal(object)
 
     def __init__(self, bpm_name='', parent=None):
-        super(BPMData, self).__init__(parent)
+        super(BPMDataAll, self).__init__("bpm_all", parent)
 
-        self.hesh = [0, 0, 0, 0]
+        self.hash = [0, 0, 0, 0]
         self.control = (1, 1, 1, 1)
         self.l = [0, 0, 0, 0]
+        #self.bpm_name = "bpm_all"
 
-        BPM1 = BPMData("bpm01")
-        BPM2 = BPMData("bpm02")
-        BPM3 = BPMData("bpm03")
-        BPM4 = BPMData("bpm04")
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.on_timer_update)
+        self.def_time = 10 * 1000
 
-        BPM1.data_ready.connect(self.timeshift)
-        BPM2.data_ready.connect(self.timeshift)
-        BPM3.data_ready.connect(self.timeshift)
-        BPM4.data_ready.connect(self.timeshift)
+        self.BPM1 = BPMData("bpm01")
+        self.BPM2 = BPMData("bpm02")
+        self.BPM3 = BPMData("bpm03")
+        self.BPM4 = BPMData("bpm04")
+        print("Sanechek1")
+
+        self.BPM1.data_ready.connect(self.timeshift)
+        self.BPM2.data_ready.connect(self.timeshift)
+        self.BPM3.data_ready.connect(self.timeshift)
+        self.BPM4.data_ready.connect(self.timeshift)
 
     def timeshift(self, BPM):
         """   """
-        self.def_time = 30
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.on_timer_update)
-        self.timer.start(self.def_time)
+        print(BPM.bpm_name)
+        self.bpm_name = BPM.bpm_name
+        if self.hash == [0, 0, 0, 0]:
+            self.timer.start(self.def_time)
 
-        if BPM.bpm_name == "bpm01":
-            hesh[0] = 1
+        print("time")
 
-        elif BPM.bpm_name == "bpm02":
-            hesh[1] = 1
+        if self.bpm_name == "bpm01":
+            self.hash[0] = self.hash[0] + 1
+            print("Sanechek01")
 
-        elif BPM.bpm_name == "bpm03":
-            hesh[2] = 1
 
-        elif BPM.bpm_name == "bpm04":
-            hesh[3] = 1
+        elif self.bpm_name == "bpm02":
+            self.hash[1] = self.hash[1] + 1
+            print("Sanechek2")
+
+        elif self.bpm_name == "bpm03":
+            self.hash[2] = self.hash[2] + 1
+            print("Sanechek3")
+
+        elif self.bpm_name == "bpm04":
+            self.hash[3] = self.hash[3] + 1
+            print("Sanechek4")
 
         else:
             pass
 
-        if self.control = (hesh[0], hesh[1], hesh[2], hesh[3]):
+        if (self.hash[0], self.hash[1], self.hash[2], self.hash[3]) == self.control:
             self.controller()
 
     def controller(self):
         """   """
-        self.l = [len(BPM1.dataT), len(BPM2.dataT), len(BPM3.dataT), len(BPM4.dataT)]
+        self.l = [len(self.BPM1.dataT), len(self.BPM2.dataT), len(self.BPM3.dataT), len(self.BPM4.dataT)]
+        self.hash = [0, 0, 0, 0]
+        print("Sanechek_cntrl")
+
         if all(self.l[i] == self.l[i+1] for i in range(len(self.l)-1)):
-            self.reshaping_data()
+            self.start_type_check()
+
         else:
-            self.l = [0, 0, 0, 0]
             pass
-        
+
+
+    def start_type_check(self):
+        """   """
+        #Here'll be checking for type of bpm's starters.
+        self.reshaping_data()
+        #pass
 
     def on_timer_update(self):
         """   """
-        hesh = np.zeros(4)
+        self.hash = [0, 0, 0, 0]
+        self.l = [0, 0, 0, 0]
         pass
 
     def reshaping_data(self):
         """   """
-        self.dataT = reshaping_arrays(BPM1.dataT, BPM2.dataT, BPM3.dataT, BPM4.dataT)
-        self.dataX = reshaping_arrays(BPM1.dataX, BPM2.dataX, BPM3.dataX, BPM4.dataX)
-        self.dataZ = reshaping_arrays(BPM1.dataZ, BPM2.dataZ, BPM3.dataZ, BPM4.dataZ)
-        self.dataI = reshaping_arrays(BPM1.dataI, BPM2.dataI, BPM3.dataI, BPM4.dataI)
-        
+        self.dataT = np.arange(len(self.BPM1.dataT)*4)
+        self.dataX = self.reshaping_arrays(self.BPM1.dataX, self.BPM2.dataX, self.BPM3.dataX, self.BPM4.dataX)
+        self.dataZ = self.reshaping_arrays(self.BPM1.dataZ, self.BPM2.dataZ, self.BPM3.dataZ, self.BPM4.dataZ)
+        self.dataI = self.reshaping_arrays(self.BPM1.dataI, self.BPM2.dataI, self.BPM3.dataI, self.BPM4.dataI)
+        self.data_len = len(self.dataT)
+
         self.data_ready.emit(self)
 
     def reshaping_arrays(self, M1, M2, M3, M4):
         """   """
         newMass = np.zeros(len(M1)*4)
         for i in range(len(M1)):
-            newMass[4*i] = M1[i]
+            newMass[4*i + 0] = M1[i]
             newMass[4*i + 1] = M2[i]
             newMass[4*i + 2] = M3[i]
             newMass[4*i + 3] = M4[i]
 
-        return(newMass)
+            #print("{0}, {1}, {2}, {3}".format(M1[i], M2[i], M3[i], M4[i]))
 
-    def force_data_ready(self, signature):
-        """   """
-        super().force_data_ready(signature)
+        return(newMass)

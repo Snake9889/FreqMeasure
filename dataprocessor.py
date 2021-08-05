@@ -74,6 +74,7 @@ class DataProcessor(QObject):
     def on_data_recv(self, data_source):
         """   """
         self.data_len = data_source.data_len
+
         self.regen_wind(self.windowType)
 
         self.dataT = data_source.dataT

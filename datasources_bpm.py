@@ -13,9 +13,9 @@ class BPMData(BPMTemplate):
     bpm_channel_template = "v2cx::hemera:4."
 
     def __init__(self, bpm_name='', parent=None):
-        super(BPMData, self).__init__(parent)
+        super(BPMData, self).__init__(bpm_name, parent)
 
-        # self.bpm_name = bpm_name
+        #self.bpm_name = bpm_name
         # self.num_pts = 1024
         # self.data_len = self.num_pts
 
@@ -69,13 +69,13 @@ class BPMData(BPMTemplate):
 
         self.data_ready.emit(self)
 
-        
 
-    def force_data_ready(self, signature):
-        """   """
+
+    # def force_data_ready(self, signature):
+        # """   """
         # if signature == True:
             # if self.dataT is not None:
                 # self.data_ready.emit(self)
             # else:
                 # pass
-        super().force_data_ready(signature)
+        # super().force_data_ready(signature)
