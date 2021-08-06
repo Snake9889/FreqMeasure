@@ -31,12 +31,12 @@ class BPMDataAll(BPMTemplate):
         self.BPM4 = BPMData("bpm04")
         print("Sanechek1")
 
-        self.BPM1.data_ready.connect(self.timeshift)
-        self.BPM2.data_ready.connect(self.timeshift)
-        self.BPM3.data_ready.connect(self.timeshift)
-        self.BPM4.data_ready.connect(self.timeshift)
+        self.BPM1.data_ready.connect(self.on_data_ready)
+        self.BPM2.data_ready.connect(self.on_data_ready)
+        self.BPM3.data_ready.connect(self.on_data_ready)
+        self.BPM4.data_ready.connect(self.on_data_ready)
 
-    def timeshift(self, BPM):
+    def on_data_ready(self, BPM):
         """   """
         print(BPM.bpm_name)
         self.bpm_name = BPM.bpm_name
@@ -47,28 +47,23 @@ class BPMDataAll(BPMTemplate):
 
         if self.bpm_name == "bpm01":
             self.hash[0] = self.hash[0] + 1
-            print("Sanechek01")
-
 
         elif self.bpm_name == "bpm02":
             self.hash[1] = self.hash[1] + 1
-            print("Sanechek2")
 
         elif self.bpm_name == "bpm03":
             self.hash[2] = self.hash[2] + 1
-            print("Sanechek3")
 
         elif self.bpm_name == "bpm04":
             self.hash[3] = self.hash[3] + 1
-            print("Sanechek4")
 
         else:
             pass
 
         if (self.hash[0], self.hash[1], self.hash[2], self.hash[3]) == self.control:
-            self.controller()
+            self.len_check()
 
-    def controller(self):
+    def len_check(self):
         """   """
         self.l = [len(self.BPM1.dataT), len(self.BPM2.dataT), len(self.BPM3.dataT), len(self.BPM4.dataT)]
         self.hash = [0, 0, 0, 0]
@@ -111,7 +106,5 @@ class BPMDataAll(BPMTemplate):
             newMass[4*i + 1] = M2[i]
             newMass[4*i + 2] = M3[i]
             newMass[4*i + 3] = M4[i]
-
-            #print("{0}, {1}, {2}, {3}".format(M1[i], M2[i], M3[i], M4[i]))
 
         return(newMass)
