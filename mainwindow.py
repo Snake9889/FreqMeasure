@@ -33,8 +33,8 @@ class MainWindow(QMainWindow):
 
         self.settingsControl = settings_control
 
-        self.buttonExit.clicked.connect(self.on_exit_button)
-        self.buttonExit.clicked.connect(QApplication.instance().quit)
+        # self.buttonExit.clicked.connect(self.on_exit_button)
+        # self.buttonExit.clicked.connect(QApplication.instance().quit)
 
         self.data_proc_X.data_processed.connect(self.on_data2_ready)
         self.data_proc_Z.data_processed.connect(self.on_data4_ready)
@@ -55,11 +55,16 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
 
-        self.buttonRead.clicked.connect(self.on_read_button)
-        self.buttonSave.clicked.connect(self.on_save_button)
+        # self.buttonRead.clicked.connect(self.on_read_button)
+        # self.buttonSave.clicked.connect(self.on_save_button)
 
         self.help_widget = HelpWidget(os.path.join(ui_path, 'etc/icons/Help_1.png'))
         self.actionHelp.triggered.connect(self.help_widget.show)
+
+        self.actionSave.triggered.connect(self.on_save_button)
+        self.actionRead.triggered.connect(self.on_read_button)
+        self.actionExit.triggered.connect(self.on_exit_button)
+        self.actionExit.triggered.connect(QApplication.instance().quit)
 
         self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
         self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)

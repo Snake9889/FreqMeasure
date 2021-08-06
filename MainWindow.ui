@@ -277,27 +277,6 @@
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="QPushButton" name="buttonSave">
-          <property name="text">
-           <string>Save_Set</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonRead">
-          <property name="text">
-           <string>Read_Set</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonExit">
-          <property name="text">
-           <string>Exit</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
      </layout>
@@ -341,10 +320,37 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionHelp"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionRead"/>
+   <addaction name="actionExit"/>
   </widget>
   <action name="actionHelp">
    <property name="text">
     <string>Help</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Settings</string>
+   </property>
+  </action>
+  <action name="actionRead">
+   <property name="text">
+    <string>Read</string>
+   </property>
+   <property name="toolTip">
+    <string>Read Settings</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit</string>
    </property>
   </action>
  </widget>
