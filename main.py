@@ -49,7 +49,7 @@ if __name__ == "__main__":
     data_proc_Z = DataProcessor("Z")
     settingsControl = SettingsControl()
 
-    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
+    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl, bpm_name_parsed)
     mw.setWindowTitle('BTMS ({})'.format(bpm_name_parsed))
 
     icon_path = os.path.dirname(os.path.abspath(__file__))

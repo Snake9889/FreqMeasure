@@ -75,7 +75,6 @@ class BPMDataAll(BPMTemplate):
         else:
             pass
 
-
     def start_type_check(self):
         """   """
         #Here'll be checking for type of bpm's starters.

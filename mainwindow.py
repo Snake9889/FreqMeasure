@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
     """   """
     region_changed = pyqtSignal(object)
 
-    def __init__(self, data_source, data_proc_X, data_proc_Z, settings_control):
+    def __init__(self, data_source, data_proc_X, data_proc_Z, settings_control, bpm_name):
         super(MainWindow, self).__init__()
 
         ui_path = os.path.dirname(os.path.abspath(__file__))
@@ -32,9 +32,7 @@ class MainWindow(QMainWindow):
         self.data_proc_Z = data_proc_Z
 
         self.settingsControl = settings_control
-
-        # self.buttonExit.clicked.connect(self.on_exit_button)
-        # self.buttonExit.clicked.connect(QApplication.instance().quit)
+        self.bpm = bpm_name
 
         self.data_proc_X.data_processed.connect(self.on_data2_ready)
         self.data_proc_Z.data_processed.connect(self.on_data4_ready)
@@ -55,16 +53,14 @@ class MainWindow(QMainWindow):
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
 
-        # self.buttonRead.clicked.connect(self.on_read_button)
-        # self.buttonSave.clicked.connect(self.on_save_button)
+        self.actionSave.triggered.connect(self.on_save_button)
+        self.actionRead.triggered.connect(self.on_read_button)
+
+        self.actionExit.triggered.connect(self.on_exit_button)
+        self.actionExit.triggered.connect(QApplication.instance().quit)
 
         self.help_widget = HelpWidget(os.path.join(ui_path, 'etc/icons/Help_1.png'))
         self.actionHelp.triggered.connect(self.help_widget.show)
-
-        self.actionSave.triggered.connect(self.on_save_button)
-        self.actionRead.triggered.connect(self.on_read_button)
-        self.actionExit.triggered.connect(self.on_exit_button)
-        self.actionExit.triggered.connect(QApplication.instance().quit)
 
         self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
         self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)
@@ -229,23 +225,27 @@ class MainWindow(QMainWindow):
     def save_settings(self):
         """   """
         settings = QSettings()
-        settings.beginGroup('Plots')
+        settings.beginGroup(self.bpm)
+        settings.beginGroup("Plots")
         settings.setValue("x_zoom", self.x_rect)
         settings.setValue("z_zoom", self.z_rect)
         settings.setValue("fx_zoom", self.fx_rect)
         settings.setValue("fz_zoom", self.fz_rect)
         settings.endGroup()
+        settings.endGroup()
         settings.sync()
 
     def read_settings(self):
         """   """
-        settings = QSettings()
-        settings.beginGroup('Plots')
         rect_def = [[0, 1], [0, 1]]
+        settings = QSettings()
+        settings.beginGroup(self.bpm)
+        settings.beginGroup("Plots")
         self.x_rect = settings.value("x_zoom", rect_def)
         self.fx_rect = settings.value("fx_zoom", rect_def)
         self.z_rect = settings.value("z_zoom", rect_def)
         self.fz_rect = settings.value("fz_zoom", rect_def)
+        settings.endGroup()
         settings.endGroup()
 
         self.ui.plotX.setRange(xRange=self.x_rect[0], yRange=self.x_rect[1])

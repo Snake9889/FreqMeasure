@@ -133,9 +133,9 @@ class ControlWidget(QWidget):
 
     def save_settings(self):
         """   """
-        if self.str_id == self.default_str_id:
-            print(self.default_str_id)
-            return
+        # if self.str_id == self.default_str_id:
+            # print(self.default_str_id)
+            # return
 
         settings = QSettings()
         settings.beginGroup(self.bpm)
@@ -162,6 +162,7 @@ class ControlWidget(QWidget):
             self.rboard = settings.value("rboard", 0.25, type=float)
             self.scale = settings.value("scale", "Normal")
             settings.endGroup()
+            settings.endGroup()
 
         elif self.str_id == "Data_Z":
             settings.beginGroup(self.bpm)
@@ -171,6 +172,7 @@ class ControlWidget(QWidget):
             self.lboard = settings.value("lboard", 0.10, type=float)
             self.rboard = settings.value("rboard", 0.30, type=float)
             self.scale = settings.value("scale", "Normal")
+            settings.endGroup()
             settings.endGroup()
 
         else:

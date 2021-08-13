@@ -15,19 +15,6 @@ class BPMData(BPMTemplate):
     def __init__(self, bpm_name='', parent=None):
         super(BPMData, self).__init__(bpm_name, parent)
 
-        #self.bpm_name = bpm_name
-        # self.num_pts = 1024
-        # self.data_len = self.num_pts
-
-        # self.data = None
-        # self.dataT = None
-        # self.dataX = None
-        # self.dataZ = None
-        # self.dataI = None
-
-        # self.lboard = 0.01
-        # self.rboard = 0.5
-
         if bpm_name == "bpm01":
             bpm_channel = 4
         elif bpm_name == "bpm02":
@@ -69,13 +56,3 @@ class BPMData(BPMTemplate):
 
         self.data_ready.emit(self)
 
-
-
-    # def force_data_ready(self, signature):
-        # """   """
-        # if signature == True:
-            # if self.dataT is not None:
-                # self.data_ready.emit(self)
-            # else:
-                # pass
-        # super().force_data_ready(signature)
