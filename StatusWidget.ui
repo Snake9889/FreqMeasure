@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>322</width>
-    <height>410</height>
+    <width>309</width>
+    <height>211</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,11 @@
       <widget class="QLabel" name="bpm_1_label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>BPM_1 status:</string>
@@ -32,11 +35,14 @@
       <widget class="QLabel" name="status_1">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="toolTip">
         <string>Number of received packeges from BPM_1</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>0</string>
@@ -51,8 +57,11 @@
       <widget class="QLabel" name="bpm_2_label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>BPM_2 status:</string>
@@ -63,11 +72,14 @@
       <widget class="QLabel" name="status_2">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="toolTip">
         <string>Number of received packeges from BPM_2</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>0</string>
@@ -82,8 +94,11 @@
       <widget class="QLabel" name="bpm_3_label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>BPM_3 status:</string>
@@ -94,11 +109,14 @@
       <widget class="QLabel" name="status_3">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="toolTip">
         <string>Number of received packeges from BPM_3</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>0</string>
@@ -113,12 +131,11 @@
       <widget class="QLabel" name="bpm_4_label">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(0, 224, 255);
-color: rgb(255, 255, 255);</string>
+        <string notr="true">color: rgb(0, 245, 245);</string>
        </property>
        <property name="text">
         <string>BPM_4 status:</string>
@@ -129,15 +146,15 @@ color: rgb(255, 255, 255);</string>
       <widget class="QLabel" name="status_4">
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="toolTip">
         <string>Number of received packeges from BPM_4</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 222, 255);</string>
+        <string notr="true">color: rgb(0, 245, 245);
+</string>
        </property>
        <property name="text">
         <string>0</string>
@@ -150,7 +167,4 @@ background-color: rgb(0, 222, 255);</string>
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>

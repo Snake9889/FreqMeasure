@@ -20,9 +20,8 @@ class StatusWidget(QWidget):
     def __init__(self, parent=None):
         super(StatusWidget, self).__init__(parent)
 
-        pass
-        # ui_path = os.path.dirname(os.path.abspath(__file__))
-        # self.ui = uic.loadUi(os.path.join(ui_path, 'ControlWidget.ui'), self)
+        ui_path = os.path.dirname(os.path.abspath(__file__))
+        self.ui = uic.loadUi(os.path.join(ui_path, 'StatusWidget.ui'), self)
 
         # argument_parser = TerminalParser()
 
@@ -113,88 +112,6 @@ class StatusWidget(QWidget):
         # self.boards_changed.emit(self.boards)
         # self.signature.emit(True)
 
-    # def on_boards_changed_ext(self, boards_dict):
-        # """   """
-        # self.lboard = boards_dict[0]
-        # self.rboard = boards_dict[1]
-
-        # self.lboardSBox.valueChanged.disconnect()
-        # self.lboardSBox.setValue(self.lboard)
-        # self.lboardSBox.valueChanged.connect(self.on_lboardsbox_changed)
-
-        # self.rboardSBox.valueChanged.disconnect()
-        # self.rboardSBox.setValue(self.rboard)
-        # self.rboardSBox.valueChanged.connect(self.on_rboardsbox_changed)
-
-        # self.on_boards_changed()
-
     # def set_str_id(self, str):
         # """   """
         # self.str_id = str
-
-    # def save_settings(self):
-        # """   """
-        # # if self.str_id == self.default_str_id:
-            # # print(self.default_str_id)
-            # # return
-
-        # settings = QSettings()
-        # settings.beginGroup(self.bpm)
-        # settings.beginGroup(self.str_id)
-        # settings.setValue("window", self.window)
-        # settings.setValue("method", self.method)
-        # settings.setValue("lboard", self.lboard)
-        # settings.setValue("rboard", self.rboard)
-        # settings.setValue("scale", self.scale)
-        # settings.endGroup()
-        # print("Saved!!!!!")
-        # settings.sync()
-
-    # def read_settings(self):
-        # """   """
-        # settings = QSettings()
-
-        # if self.str_id == "Data_X":
-            # settings.beginGroup(self.bpm)
-            # settings.beginGroup(self.str_id)
-            # self.window = settings.value("window", "None")
-            # self.method = settings.value("method", "None")
-            # self.lboard = settings.value("lboard", 0.10, type=float)
-            # self.rboard = settings.value("rboard", 0.25, type=float)
-            # self.scale = settings.value("scale", "Normal")
-            # settings.endGroup()
-            # settings.endGroup()
-
-        # elif self.str_id == "Data_Z":
-            # settings.beginGroup(self.bpm)
-            # settings.beginGroup(self.str_id)
-            # self.window = settings.value("window", "Hann")
-            # self.method = settings.value("method", "Peak")
-            # self.lboard = settings.value("lboard", 0.10, type=float)
-            # self.rboard = settings.value("rboard", 0.30, type=float)
-            # self.scale = settings.value("scale", "Normal")
-            # settings.endGroup()
-            # settings.endGroup()
-
-        # else:
-            # print("Have no SETTINGS!!!!!")
-
-        # self.checkWindowBox.setCurrentText(self.window)
-        # self.window_changed_str.emit(self.window)
-
-        # if self.scale == "Normal":
-            # self.log_mod.setCheckState(Qt.Unchecked)
-        # elif self.scale == "Log_Y":
-            # self.log_mod.setCheckState(Qt.Checked)
-        # self.scale_changed_obj.emit(self)
-
-        # self.lboardSBox.setValue(self.lboard)
-        # self.rboardSBox.setValue(self.rboard)
-
-        # if self.method == "Peak":
-            # self.usePeakBtn.setChecked(True)
-        # elif self.method == "Gassior":
-            # self.useGassiorBtn.setChecked(True)
-        # elif self.method == "Naff":
-            # self.useNaffBtn.setChecked(True)
-        # self.method_changed_str.emit(self.method)

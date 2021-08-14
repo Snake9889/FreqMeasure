@@ -13,7 +13,7 @@ class BPMTemplate(QObject):
     def __init__(self, bpm_name='', parent=None):
         super(BPMTemplate, self).__init__(parent)
 
-        print("Template BPM name: {0}".format(bpm_name))
+        # print("Template BPM name: {0}".format(bpm_name))
 
         self.bpm_name = bpm_name
         self.num_pts = 1024
