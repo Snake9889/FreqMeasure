@@ -59,8 +59,11 @@ if __name__ == "__main__":
 
     data_source.data_ready.connect(mw.on_data1_ready)
     data_source.data_ready.connect(mw.on_data3_ready)
+    data_source.data_ready.connect(mw.statusWidget.data_ready)
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
+
+    data_source.data_error.connect(mw.statusWidget.data_error)
 
     settingsControl.add_object(mw)
     settingsControl.add_object(mw.controlWidgetX)

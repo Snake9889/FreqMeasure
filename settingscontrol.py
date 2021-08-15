@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtCore import QSize, QCoreApplication
 
 
 class SettingsControl(QObject):
@@ -10,6 +11,8 @@ class SettingsControl(QObject):
 
     def __init__(self, parent=None):
         super(SettingsControl, self).__init__(parent)
+
+        QCoreApplication.setApplicationName("BTMS")
 
         self.obj_list = []
 

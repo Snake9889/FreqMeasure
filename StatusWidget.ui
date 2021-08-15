@@ -17,21 +17,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="bpm_1_label">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
-       </property>
-       <property name="text">
-        <string>BPM_1 status:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="status_1">
        <property name="font">
         <font>
@@ -42,7 +27,7 @@
         <string>Number of received packeges from BPM_1</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>0</string>
@@ -54,21 +39,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="bpm_2_label">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
-       </property>
-       <property name="text">
-        <string>BPM_2 status:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="status_2">
        <property name="font">
         <font>
@@ -79,7 +49,7 @@
         <string>Number of received packeges from BPM_2</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>0</string>
@@ -91,21 +61,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="bpm_3_label">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
-       </property>
-       <property name="text">
-        <string>BPM_3 status:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="status_3">
        <property name="font">
         <font>
@@ -116,7 +71,7 @@
         <string>Number of received packeges from BPM_3</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>0</string>
@@ -128,21 +83,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="bpm_4_label">
-       <property name="font">
-        <font>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);</string>
-       </property>
-       <property name="text">
-        <string>BPM_4 status:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="status_4">
        <property name="font">
         <font>
@@ -153,8 +93,7 @@
         <string>Number of received packeges from BPM_4</string>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(0, 245, 245);
-</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>0</string>

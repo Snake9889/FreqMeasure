@@ -11,7 +11,7 @@ from datasources_bpm import BPMData
 
 class BPMDataAll(BPMTemplate):
     """   """
-    # data_ready = pyqtSignal(object)
+    data_error = pyqtSignal(object)
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMDataAll, self).__init__("bpm_all", parent)
@@ -29,7 +29,6 @@ class BPMDataAll(BPMTemplate):
         self.BPM2 = BPMData("bpm02")
         self.BPM3 = BPMData("bpm03")
         self.BPM4 = BPMData("bpm04")
-        print("Sanechek1")
 
         self.BPM1.data_ready.connect(self.on_data_ready)
         self.BPM2.data_ready.connect(self.on_data_ready)
@@ -66,13 +65,12 @@ class BPMDataAll(BPMTemplate):
     def len_check(self):
         """   """
         self.l = [len(self.BPM1.dataT), len(self.BPM2.dataT), len(self.BPM3.dataT), len(self.BPM4.dataT)]
-        self.hash = [0, 0, 0, 0]
-        print("Sanechek_cntrl")
 
         if all(self.l[i] == self.l[i+1] for i in range(len(self.l)-1)):
             self.start_type_check()
 
         else:
+            self.hash = [0, 0, 0, 0]
             pass
 
     def start_type_check(self):
@@ -83,6 +81,7 @@ class BPMDataAll(BPMTemplate):
 
     def on_timer_update(self):
         """   """
+        self.data_error.emit(self)
         self.hash = [0, 0, 0, 0]
         self.l = [0, 0, 0, 0]
         pass
@@ -96,6 +95,8 @@ class BPMDataAll(BPMTemplate):
         self.data_len = len(self.dataT)
 
         self.data_ready.emit(self)
+
+        self.hash = [0, 0, 0, 0]
 
     def reshaping_arrays(self, M1, M2, M3, M4):
         """   """
