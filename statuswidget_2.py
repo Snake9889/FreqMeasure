@@ -56,7 +56,6 @@ class StatusWidget(QWidget):
             label.setToolTip("Everything alright")
             label.setStyleSheet("color : black")
             label.setText('BPM_{}: {}'.format(pos, num))
-            label.setText(u'<span style="font-size: 32pt; color: red;">•</span>')
 
         elif num >= 2:
             label.setToolTip("BPM work incorrectly")

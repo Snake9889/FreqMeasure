@@ -11,7 +11,6 @@ from datasources_bpm import BPMData
 
 class BPMDataAll(BPMTemplate):
     """   """
-    data_error = pyqtSignal(object)
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMDataAll, self).__init__("bpm_all", parent)
@@ -34,6 +33,12 @@ class BPMDataAll(BPMTemplate):
         self.BPM2.data_ready.connect(self.on_data_ready)
         self.BPM3.data_ready.connect(self.on_data_ready)
         self.BPM4.data_ready.connect(self.on_data_ready)
+
+        #QWidget statusWidget = StatusWidget()
+
+    def get_status_widget(self):
+        return statusWidget
+
 
     def on_data_ready(self, BPM):
         """   """

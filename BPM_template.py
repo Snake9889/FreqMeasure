@@ -3,11 +3,13 @@
 from PyQt5.QtCore import pyqtSignal, QObject
 import numpy as np
 import pycx4.qcda as cda
+from PyQt5.QtWidgets import QLabel
 
 
 class BPMTemplate(QObject):
     """   """
     data_ready = pyqtSignal(object)
+    data_error = pyqtSignal(object)
 
 
     def __init__(self, bpm_name='', parent=None):
@@ -26,7 +28,6 @@ class BPMTemplate(QObject):
 
         self.lboard = 0.01
         self.rboard = 0.5
-
 
     def force_data_ready(self, signature):
         """   """

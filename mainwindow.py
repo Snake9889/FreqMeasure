@@ -19,6 +19,8 @@ class MainWindow(QMainWindow):
 
         self.window_str = "None"
 
+        # self.statusWidget = data_source.get_status_widget()
+
         self.images_list = []
 
         self.x_rect = None
