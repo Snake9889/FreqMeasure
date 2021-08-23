@@ -21,7 +21,7 @@ class StatusWidget(QWidget):
 
         if self.bpm == "all":
             ui_path = os.path.dirname(os.path.abspath(__file__))
-            self.ui = uic.loadUi(os.path.join(ui_path, 'StatusWidget.ui'), self)
+            self.ui = uic.loadUi(os.path.join(ui_path, 'StatusWidget_2.ui'), self)
 
         else:
             pass

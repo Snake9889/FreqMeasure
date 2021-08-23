@@ -34,7 +34,7 @@ if __name__ == "__main__":
         data_source = BPMData()
 
     elif bpm_name_parsed == "all":
-        from datasources_all import BPMDataAll
+        from datasources_all_2 import BPMDataAll
         data_source = BPMDataAll()
 
     else:
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
 
-    data_source.data_error.connect(mw.statusWidget.data_error)
+#    data_source.data_error.connect(mw.statusWidget.data_error)
 
     settingsControl.add_object(mw)
     settingsControl.add_object(mw.controlWidgetX)

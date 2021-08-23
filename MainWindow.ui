@@ -275,7 +275,7 @@
        </widget>
       </item>
       <item>
-       <widget class="StatusWidget" name="statusWidget" native="true"/>
+       <widget class="QWidget" name="statusWidget" native="true"/>
       </item>
       <item>
        <spacer name="verticalSpacer">
@@ -375,12 +375,6 @@
    <class>ControlWidget</class>
    <extends>QWidget</extends>
    <header>controlwidget</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>StatusWidget</class>
-   <extends>QWidget</extends>
-   <header>statuswidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

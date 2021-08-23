@@ -7,6 +7,9 @@ from PyQt5 import uic
 import pyqtgraph as pg
 from helpwidget import HelpWidget
 
+from statuswidget import StatusWidget
+
+
 class MainWindow(QMainWindow):
     """   """
     region_changed = pyqtSignal(object)
@@ -19,7 +22,16 @@ class MainWindow(QMainWindow):
 
         self.window_str = "None"
 
-        # self.statusWidget = data_source.get_status_widget()
+        if True:
+            """ Replace one widget with another """
+            old_statusWidget = self.statusWidget
+            #new_statusWidget = StatusWidget(self.centralwidget)
+            new_statusWidget = data_source.get_status_widget()
+            new_statusWidget.setParent(self.centralwidget)
+
+            self.ui.verticalLayout_2.replaceWidget(old_statusWidget, new_statusWidget)
+            old_statusWidget.deleteLater()
+            self.statusWidget = new_statusWidget
 
         self.images_list = []
 
