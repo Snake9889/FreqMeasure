@@ -3,11 +3,8 @@
 from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 import numpy as np
 import pycx4.qcda as cda
-
 from BPM_template import BPMTemplate
 from datasources_bpm import BPMData
-#from datasources import BPMData
-
 from statuswidget import StatusWidget
 
 class BPMDataAll(BPMTemplate):
@@ -25,6 +22,12 @@ class BPMDataAll(BPMTemplate):
         self.timer.timeout.connect(self.on_timer_update)
         self.def_time = 10 * 1000
 
+        self.statusWidget = StatusWidget()
+        self.no_data(self.statusWidget.status_1)
+        self.no_data(self.statusWidget.status_2)
+        self.no_data(self.statusWidget.status_3)
+        self.no_data(self.statusWidget.status_4)
+
         self.BPM1 = BPMData("bpm01")
         self.BPM2 = BPMData("bpm02")
         self.BPM3 = BPMData("bpm03")
@@ -35,9 +38,8 @@ class BPMDataAll(BPMTemplate):
         self.BPM3.data_ready.connect(self.on_data_ready)
         self.BPM4.data_ready.connect(self.on_data_ready)
 
-        self.statusWidget = StatusWidget()
-
     def get_status_widget(self):
+        """   """
         return self.statusWidget
 
 
@@ -66,6 +68,7 @@ class BPMDataAll(BPMTemplate):
             pass
 
         if (self.hash[0], self.hash[1], self.hash[2], self.hash[3]) == self.control:
+            self.everyting_ok(self.statusWidget.status_1)
             self.len_check()
 
     def len_check(self):
@@ -73,21 +76,36 @@ class BPMDataAll(BPMTemplate):
         self.l = [len(self.BPM1.dataT), len(self.BPM2.dataT), len(self.BPM3.dataT), len(self.BPM4.dataT)]
 
         if all(self.l[i] == self.l[i+1] for i in range(len(self.l)-1)):
+            self.everyting_ok(self.statusWidget.status_2)
             self.start_type_check()
 
         else:
             self.hash = [0, 0, 0, 0]
+            self.statusWidget.status_2.setToolTip("Lengths of arrays from BPM-s are different")
+            self.statusWidget.status_2.setStyleSheet("color : black")
+            self.statusWidget.status_2.setText(u'<span style="font-size: 32pt; color: red;">•</span>')
             pass
 
     def start_type_check(self):
         """   """
         #Here'll be checking for type of bpm's starters.
+        self.everyting_ok(self.statusWidget.status_3)
         self.reshaping_data()
         #pass
 
     def on_timer_update(self):
         """   """
-        self.data_error.emit(self)
+        if self.hash == [0, 0, 0, 0]:
+            self.no_data(self.statusWidget.status_1)
+            self.statusWidget.status_4.setToolTip("No connection to server")
+            self.statusWidget.status_4.setStyleSheet("color : black")
+            self.statusWidget.status_4.setText(u'<span style="font-size: 32pt; color: red;">•</span>')
+
+        else:
+            self.statusWidget.status_1.setToolTip("Some of BPM's send data too frequently or send nothing")
+            self.statusWidget.status_1.setStyleSheet("color : black")
+            self.statusWidget.status_1.setText(u'<span style="font-size: 32pt; color: red;">•</span>')
+            self.everyting_ok(self.statusWidget.status_4)
         self.hash = [0, 0, 0, 0]
         self.l = [0, 0, 0, 0]
         pass
@@ -100,10 +118,7 @@ class BPMDataAll(BPMTemplate):
         self.dataI = self.reshaping_arrays(self.BPM1.dataI, self.BPM2.dataI, self.BPM3.dataI, self.BPM4.dataI)
         self.data_len = len(self.dataT)
 
-        self.changing_label(self.statusWidget.status_1, self.hash[0], 1)
-        self.changing_label(self.statusWidget.status_2, self.hash[1], 2)
-        self.changing_label(self.statusWidget.status_3, self.hash[2], 3)
-        self.changing_label(self.statusWidget.status_4, self.hash[3], 4)
+        self.everyting_ok(self.statusWidget.status_4)
 
         self.data_ready.emit(self)
 
@@ -120,26 +135,14 @@ class BPMDataAll(BPMTemplate):
 
         return(newMass)
 
-    def changing_label(self, label, num, pos):
+    def everyting_ok(self, label):
         """   """
-        if num == 0:
-            label.setToolTip("Data wasn't received")
-            label.setStyleSheet("color : blue")
-            label.setText('BPM_{}: {}'.format(pos, num))
-            # label.setText('{}'.format(num))
+        label.setToolTip("Everything alright")
+        label.setStyleSheet("color : black")
+        label.setText(u'<span style="font-size: 32pt; color: green;">•</span>')
 
-        elif num == 1:
-            label.setToolTip("Everything alright")
-            label.setStyleSheet("color : black")
-            label.setText('BPM_{}: {}'.format(pos, num))
-            label.setText(u'<span style="font-size: 32pt; color: red;">•</span>')
-
-        elif num >= 2:
-            label.setToolTip("BPM work incorrectly")
-            label.setStyleSheet("color : red")
-            label.setText('{}'.format(num))
-
-        else:
-            label.setToolTip("The program doesn't work correctly")
-            label.setStyleSheet("color : green")
-            label.setText('{}'.format(num))
+    def no_data(self, label):
+        """   """
+        label.setToolTip("Data didn't come")
+        label.setStyleSheet("color : black")
+        label.setText(u'<span style="font-size: 32pt; color: blue;">•</span>')

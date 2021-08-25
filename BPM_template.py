@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QLabel
 class BPMTemplate(QObject):
     """   """
     data_ready = pyqtSignal(object)
-    data_error = pyqtSignal(object)
+    # data_error = pyqtSignal(object)
 
 
     def __init__(self, bpm_name='', parent=None):

@@ -21,17 +21,20 @@ class MainWindow(QMainWindow):
         self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow.ui'), self)
 
         self.window_str = "None"
+        self.bpm = bpm_name
 
-        if True:
+        if self.bpm == "all":
             """ Replace one widget with another """
             old_statusWidget = self.statusWidget
-            #new_statusWidget = StatusWidget(self.centralwidget)
             new_statusWidget = data_source.get_status_widget()
             new_statusWidget.setParent(self.centralwidget)
 
             self.ui.verticalLayout_2.replaceWidget(old_statusWidget, new_statusWidget)
             old_statusWidget.deleteLater()
             self.statusWidget = new_statusWidget
+
+        else:
+            pass
 
         self.images_list = []
 
@@ -41,12 +44,9 @@ class MainWindow(QMainWindow):
         self.fz_rect = None
 
         self.data_source = data_source
-
         self.data_proc_X = data_proc_X
         self.data_proc_Z = data_proc_Z
-
         self.settingsControl = settings_control
-        self.bpm = bpm_name
 
         self.data_proc_X.data_processed.connect(self.on_data2_ready)
         self.data_proc_Z.data_processed.connect(self.on_data4_ready)
