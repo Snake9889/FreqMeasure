@@ -34,7 +34,7 @@ if __name__ == "__main__":
         data_source = BPMData()
 
     elif bpm_name_parsed == "all":
-        from datasources_all_2 import BPMDataAll
+        from datasources_all import BPMDataAll
         data_source = BPMDataAll()
 
     else:

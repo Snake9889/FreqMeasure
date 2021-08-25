@@ -6,15 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>309</width>
-    <height>211</height>
+    <width>284</width>
+    <height>86</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QComboBox" name="particles_type">
+     <item>
+      <property name="text">
+       <string>e-</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>e+</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="status_1">
@@ -23,21 +37,11 @@
          <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="toolTip">
-        <string>Number of received packeges from BPM_1</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
-        <string>0</string>
+        <string/>
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="status_2">
        <property name="font">
@@ -45,21 +49,11 @@
          <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="toolTip">
-        <string>Number of received packeges from BPM_2</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
-        <string>0</string>
+        <string/>
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="status_3">
        <property name="font">
@@ -67,21 +61,11 @@
          <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="toolTip">
-        <string>Number of received packeges from BPM_3</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
-        <string>0</string>
+        <string/>
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QLabel" name="status_4">
        <property name="font">
@@ -89,14 +73,8 @@
          <pointsize>12</pointsize>
         </font>
        </property>
-       <property name="toolTip">
-        <string>Number of received packeges from BPM_4</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
-        <string>0</string>
+        <string/>
        </property>
       </widget>
      </item>
