@@ -32,3 +32,11 @@ class BPMTemplate(QObject):
                 self.data_ready.emit(self)
             else:
                 pass
+
+    def save_settings(self):
+        """   """
+        pass
+
+    def read_settings(self):
+        """   """
+        pass

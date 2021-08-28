@@ -66,6 +66,7 @@ if __name__ == "__main__":
     settingsControl.add_object(mw)
     settingsControl.add_object(mw.controlWidgetX)
     settingsControl.add_object(mw.controlWidgetZ)
+    settingsControl.add_object(data_source)
     settingsControl.read_settings()
 
     data_proc_X.data_processed.connect(mw.on_freq_status_X)

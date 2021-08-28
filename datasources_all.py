@@ -1,6 +1,6 @@
 #
 #
-from PyQt5.QtCore import pyqtSignal, QObject, QTimer
+from PyQt5.QtCore import pyqtSignal, QObject, QTimer, QSettings
 import numpy as np
 import pycx4.qcda as cda
 from BPM_template import BPMTemplate
@@ -14,6 +14,8 @@ class BPMDataAll(BPMTemplate):
     DEFAULT_TIME = 5*1000
     """Control for hash"""
     control = (1, 1, 1, 1)
+    """BPM name"""
+    bpm = "all"
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMDataAll, self).__init__("bpm_all", parent)
@@ -21,6 +23,12 @@ class BPMDataAll(BPMTemplate):
         self.hash = [0, 0, 0, 0]
         self.l = [0, 0, 0, 0]
         self.particles = "e-"
+
+        self.Data1 = None
+        self.Data2 = None
+        self.Data3 = None
+        self.Data4 = None
+
 
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timer_update)
@@ -55,25 +63,6 @@ class BPMDataAll(BPMTemplate):
 
         elif state == 1:
             self.particles = "e+"
-
-        else:
-            pass
-
-        self.BPM_enumerate()
-
-    def BPM_enumerate (self):
-        """   """
-        if self.particles == "e-":
-            self.BPM1 = BPMData("bpm04")
-            self.BPM2 = BPMData("bpm01")
-            self.BPM3 = BPMData("bpm02")
-            self.BPM4 = BPMData("bpm03")
-
-        elif self.particles == "e+":
-            self.BPM1 = BPMData("bpm03")
-            self.BPM2 = BPMData("bpm02")
-            self.BPM3 = BPMData("bpm01")
-            self.BPM4 = BPMData("bpm04")
 
         else:
             pass
@@ -145,10 +134,21 @@ class BPMDataAll(BPMTemplate):
     def reshaping_data(self):
         """   """
         self.dataT = np.arange(len(self.BPM1.dataT)*4)
-        self.dataX = self.reshaping_arrays(self.BPM1.dataX, self.BPM2.dataX, self.BPM3.dataX, self.BPM4.dataX)
-        self.dataZ = self.reshaping_arrays(self.BPM1.dataZ, self.BPM2.dataZ, self.BPM3.dataZ, self.BPM4.dataZ)
-        self.dataI = self.reshaping_arrays(self.BPM1.dataI, self.BPM2.dataI, self.BPM3.dataI, self.BPM4.dataI)
         self.data_len = len(self.dataT)
+
+        if self.particles == "e-":
+            print("e-")
+            self.dataX = self.reshaping_arrays(self.BPM4.dataX, self.BPM1.dataX, self.BPM2.dataX, self.BPM3.dataX)
+            self.dataZ = self.reshaping_arrays(self.BPM4.dataZ, self.BPM1.dataZ, self.BPM2.dataZ, self.BPM3.dataZ)
+            self.dataI = self.reshaping_arrays(self.BPM4.dataI, self.BPM1.dataI, self.BPM2.dataI, self.BPM3.dataI)
+
+        elif self.particles == "e+":
+            self.dataX = self.reshaping_arrays(self.BPM3.dataX, self.BPM2.dataX, self.BPM1.dataX, self.BPM4.dataX)
+            self.dataZ = self.reshaping_arrays(self.BPM3.dataZ, self.BPM2.dataZ, self.BPM1.dataZ, self.BPM4.dataZ)
+            self.dataI = self.reshaping_arrays(self.BPM3.dataI, self.BPM2.dataI, self.BPM1.dataI, self.BPM4.dataI)
+
+        else:
+            pass
 
         self.everyting_ok(self.statusWidget.status_4)
 
@@ -177,6 +177,15 @@ class BPMDataAll(BPMTemplate):
         label.setToolTip("Data didn't come")
         #label.setStyleSheet("color : black")
         label.setText(u'<span style="font-size: 50pt; color: blue;">•</span>')
+
+    def read_settings(self):
+        """   """
+        settings = QSettings()
+        settings.beginGroup(self.bpm)
+        self.particles = settings.value("particles", "e-")
+        settings.endGroup()
+
+        self.statusWidget.particles_type.setCurrentText(self.particles)
 
     def save_settings(self):
         """   """

@@ -127,6 +127,7 @@ class MainWindow(QMainWindow):
         plot.addItem(self.FZ)
         self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
 
+        """ Here can be the cross-marker on plots """
         # vLine = pg.InfiniteLine(angle=90, movable=False)
         # hLine = pg.InfiniteLine(angle=0, movable=False)
         # p1.addItem(vLine, ignoreBounds=True)
