@@ -24,6 +24,7 @@ if __name__ == "__main__":
     QSettings.setDefaultFormat(QSettings.IniFormat)
 
     app = QApplication(sys.argv)
+    app.setStyle('Cleanlooks')
 
     argument_parser = TerminalParser()
     bpm_name_parsed = argument_parser.bpm_name_parsed

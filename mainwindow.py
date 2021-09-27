@@ -2,7 +2,7 @@
 
 import os.path
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtCore import pyqtSignal, QRectF, Qt, QSettings
+from PyQt5.QtCore import pyqtSignal, QRectF, Qt, QSettings, QSize, QPoint
 from PyQt5 import uic
 import pyqtgraph as pg
 from helpwidget import HelpWidget
@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
             new_statusWidget = data_source.get_status_widget()
             new_statusWidget.setParent(self.centralwidget)
 
-            self.ui.verticalLayout_2.replaceWidget(old_statusWidget, new_statusWidget)
+            self.ui.verticalLayout.replaceWidget(old_statusWidget, new_statusWidget)
             old_statusWidget.deleteLater()
             self.statusWidget = new_statusWidget
 
@@ -246,6 +246,8 @@ class MainWindow(QMainWindow):
         settings.setValue("z_zoom", self.z_rect)
         settings.setValue("fx_zoom", self.fx_rect)
         settings.setValue("fz_zoom", self.fz_rect)
+        settings.setValue('size', self.size())
+        settings.setValue('pos', self.pos())
         settings.endGroup()
         settings.endGroup()
         settings.sync()
@@ -260,6 +262,8 @@ class MainWindow(QMainWindow):
         self.fx_rect = settings.value("fx_zoom", rect_def)
         self.z_rect = settings.value("z_zoom", rect_def)
         self.fz_rect = settings.value("fz_zoom", rect_def)
+        self.resize(settings.value('size', QSize(500, 500)))
+        self.move(settings.value('pos', QPoint(60, 60)))
         settings.endGroup()
         settings.endGroup()
 
