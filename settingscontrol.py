@@ -12,8 +12,6 @@ class SettingsControl(QObject):
     def __init__(self, parent=None):
         super(SettingsControl, self).__init__(parent)
 
-        QCoreApplication.setApplicationName("BTMS")
-
         self.obj_list = []
 
     def add_object(self, object):
@@ -22,10 +20,12 @@ class SettingsControl(QObject):
 
     def save_settings(self):
         """   """
+        QCoreApplication.setApplicationName("BTMS")
         for obj in self.obj_list:
             obj.save_settings()
 
     def read_settings(self):
         """   """
+        QCoreApplication.setApplicationName("BTMS")
         for obj in self.obj_list:
             obj.read_settings()
