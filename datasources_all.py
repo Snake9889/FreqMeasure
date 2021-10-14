@@ -9,7 +9,7 @@ from statuswidget import StatusWidget
 
 class BPMDataAll(BPMTemplate):
     """   """
-    
+
     """Default time for timer in ms"""
     DEFAULT_TIME = 5*1000
     """Control for hash"""
@@ -106,7 +106,7 @@ class BPMDataAll(BPMTemplate):
         else:
             self.hash = [0, 0, 0, 0]
             self.statusWidget.status_2.setToolTip("Lengths of arrays from BPM-s are different")
-            self.statusWidget.status_2.setStyleSheet("background-color: red; border: 1px solid black; border-radius: 10px;")
+            self.statusWidget.status_2.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
             #self.statusWidget.status_2.setText(u'<span style="font-size: 50pt; color: red;">•</span>')
             pass
 
@@ -122,12 +122,12 @@ class BPMDataAll(BPMTemplate):
         if self.hash == [0, 0, 0, 0]:
             self.no_data(self.statusWidget.status_1)
             self.statusWidget.status_4.setToolTip("No connection to server")
-            self.statusWidget.status_4.setStyleSheet("background-color: red; border: 1px solid black; border-radius: 10px;")
+            self.statusWidget.status_4.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
             #self.statusWidget.status_4.setText(u'<span style="font-size: 50pt; color: red;">•</span>')
 
         else:
             self.statusWidget.status_1.setToolTip("Some of BPM's send data too frequently or send nothing")
-            self.statusWidget.status_1.setStyleSheet("background-color: red; border: 1px solid black; border-radius: 10px;")
+            self.statusWidget.status_1.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
             #self.statusWidget.status_1.setText(u'<span style="font-size: 50pt; color: red;">•</span>')
             self.everyting_ok(self.statusWidget.status_4)
         self.hash = [0, 0, 0, 0]
@@ -173,7 +173,7 @@ class BPMDataAll(BPMTemplate):
     def everyting_ok(self, label):
         """   """
         label.setToolTip("Everything alright")
-        label.setStyleSheet("background-color: green; border: 1px solid black; border-radius: 10px;")
+        label.setStyleSheet("QLabel{background-color: green; border: 1px solid black; border-radius: 10px;}")
         #label.setText(u'<span style="font-size: 50pt; color: green;">•</span>')
 
     def no_data(self, label):
@@ -181,7 +181,7 @@ class BPMDataAll(BPMTemplate):
         label.setToolTip("Data didn't come")
         #label.setStyleSheet("color : black")
         #label.setText(u'<span style="font-size: 50pt; color: blue;">•</span>')
-        label.setStyleSheet("background-color: blue; border: 1px solid black; border-radius: 10px;")
+        label.setStyleSheet("QLabel{background-color: blue; border: 1px solid black; border-radius: 10px;}")
 
     def read_settings(self):
         """   """
