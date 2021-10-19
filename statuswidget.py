@@ -16,8 +16,3 @@ class StatusWidget(QWidget):
         ui_path = os.path.dirname(os.path.abspath(__file__))
         self.ui = uic.loadUi(os.path.join(ui_path, 'StatusWidget.ui'), self)
 
-        # self.setStyleSheet("""QToolTip {
-                           # background-color: white;
-                           # color: black;
-                           # border: black solid 1px
-                           # }""")

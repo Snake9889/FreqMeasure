@@ -90,7 +90,7 @@ class DataProcessor(QObject):
             return
 
         self.data_to_process = self.data_to_process * self.window
-        self.fftwT = np.fft.rfftfreq(self.data_len, 1.)
+        self.fftwT = np.fft.rfftfreq(self.data_len, 1/4)
         self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
 
         if self.algType == 'None':

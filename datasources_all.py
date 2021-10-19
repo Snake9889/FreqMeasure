@@ -107,7 +107,6 @@ class BPMDataAll(BPMTemplate):
             self.hash = [0, 0, 0, 0]
             self.statusWidget.status_2.setToolTip("Lengths of arrays from BPM-s are different")
             self.statusWidget.status_2.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
-            #self.statusWidget.status_2.setText(u'<span style="font-size: 50pt; color: red;">•</span>')
             pass
 
     def start_type_check(self):
@@ -123,12 +122,10 @@ class BPMDataAll(BPMTemplate):
             self.no_data(self.statusWidget.status_1)
             self.statusWidget.status_4.setToolTip("No connection to server")
             self.statusWidget.status_4.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
-            #self.statusWidget.status_4.setText(u'<span style="font-size: 50pt; color: red;">•</span>')
 
         else:
             self.statusWidget.status_1.setToolTip("Some of BPM's send data too frequently or send nothing")
             self.statusWidget.status_1.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
-            #self.statusWidget.status_1.setText(u'<span style="font-size: 50pt; color: red;">•</span>')
             self.everyting_ok(self.statusWidget.status_4)
         self.hash = [0, 0, 0, 0]
         self.l = [0, 0, 0, 0]
@@ -136,7 +133,7 @@ class BPMDataAll(BPMTemplate):
 
     def reshaping_data(self):
         """   """
-        self.dataT = np.arange(len(self.BPM1.dataT)*4)
+        self.dataT = np.arange(len(self.BPM1.dataT), 0.25)
         self.data_len = len(self.dataT)
 
         if self.particles == "e-":
@@ -154,9 +151,7 @@ class BPMDataAll(BPMTemplate):
             pass
 
         self.everyting_ok(self.statusWidget.status_4)
-
         self.data_ready.emit(self)
-
         self.hash = [0, 0, 0, 0]
 
     def reshaping_arrays(self, M1, M2, M3, M4):
@@ -174,13 +169,10 @@ class BPMDataAll(BPMTemplate):
         """   """
         label.setToolTip("Everything alright")
         label.setStyleSheet("QLabel{background-color: green; border: 1px solid black; border-radius: 10px;}")
-        #label.setText(u'<span style="font-size: 50pt; color: green;">•</span>')
 
     def no_data(self, label):
         """   """
         label.setToolTip("Data didn't come")
-        #label.setStyleSheet("color : black")
-        #label.setText(u'<span style="font-size: 50pt; color: blue;">•</span>')
         label.setStyleSheet("QLabel{background-color: blue; border: 1px solid black; border-radius: 10px;}")
 
     def read_settings(self):

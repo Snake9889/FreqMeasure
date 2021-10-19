@@ -8,7 +8,6 @@ from BPM_template import BPMTemplate
 
 class BPMData(BPMTemplate):
     """   """
-    #data_ready = pyqtSignal(object)
 
     bpm_channel_template = "v2cx::hemera:4."
 
