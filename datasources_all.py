@@ -16,18 +16,21 @@ class BPMDataAll(BPMTemplate):
     control = (1, 1, 1, 1)
     """BPM name"""
     bpm = "all"
+    """istart type"""
+    istart_work = (0, 0, 0, 0)
 
     def __init__(self, bpm_name='', parent=None):
         super(BPMDataAll, self).__init__("bpm_all", parent)
 
         self.hash = [0, 0, 0, 0]
         self.l = [0, 0, 0, 0]
-        self.particles = "e-"
+        self.istart = [1, 1, 1, 1]
+        self.particles = "e+"
 
-        self.Data1 = None
-        self.Data2 = None
-        self.Data3 = None
-        self.Data4 = None
+        # self.Data1 = None
+        # self.Data2 = None
+        # self.Data3 = None
+        # self.Data4 = None
 
 
         self.timer = QTimer()
@@ -78,15 +81,19 @@ class BPMDataAll(BPMTemplate):
 
         if self.bpm_name == "bpm01":
             self.hash[0] = self.hash[0] + 1
+            self.istart[0] = BPM.istart
 
         elif self.bpm_name == "bpm02":
             self.hash[1] = self.hash[1] + 1
+            self.istart[1] = BPM.istart
 
         elif self.bpm_name == "bpm03":
             self.hash[2] = self.hash[2] + 1
+            self.istart[2] = BPM.istart
 
         elif self.bpm_name == "bpm04":
             self.hash[3] = self.hash[3] + 1
+            self.istart[3] = BPM.istart
 
         else:
             pass
@@ -111,10 +118,14 @@ class BPMDataAll(BPMTemplate):
 
     def start_type_check(self):
         """   """
-        #Here'll be checking for type of bpm's starters.
-        self.everyting_ok(self.statusWidget.status_3)
-        self.reshaping_data()
-        #pass
+        if (self.istart[0], self.istart[1], self.istart[2], self.istart[3]) == self.istart_work:
+            self.everyting_ok(self.statusWidget.status_3)
+            self.reshaping_data()
+
+        else:
+            self.statusWidget.status_3.setToolTip("Types of start for diff. BPM's are different")
+            self.statusWidget.status_2.setStyleSheet("QLabel{background-color: red; border: 1px solid black; border-radius: 10px;}")
+            pass
 
     def on_timer_update(self):
         """   """
@@ -133,11 +144,10 @@ class BPMDataAll(BPMTemplate):
 
     def reshaping_data(self):
         """   """
-        self.dataT = np.arange(len(self.BPM1.dataT), 0.25)
+        self.dataT = np.arange(0, len(self.BPM1.dataT) * 4, dtype=float)
         self.data_len = len(self.dataT)
 
         if self.particles == "e-":
-            print("e-")
             self.dataX = self.reshaping_arrays(self.BPM4.dataX, self.BPM1.dataX, self.BPM2.dataX, self.BPM3.dataX)
             self.dataZ = self.reshaping_arrays(self.BPM4.dataZ, self.BPM1.dataZ, self.BPM2.dataZ, self.BPM3.dataZ)
             self.dataI = self.reshaping_arrays(self.BPM4.dataI, self.BPM1.dataI, self.BPM2.dataI, self.BPM3.dataI)

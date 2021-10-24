@@ -19,6 +19,7 @@ class DataProcessor(QObject):
         self.windowType = 'None'
         self.data_len = data_len
         self.algType = argument_parser.method_name_parsed
+        self.bpm = argument_parser.bpm_name_parsed
         self.window = None
 
         self.regen_wind(self.windowType)
@@ -90,8 +91,16 @@ class DataProcessor(QObject):
             return
 
         self.data_to_process = self.data_to_process * self.window
-        self.fftwT = np.fft.rfftfreq(self.data_len, 1/4)
-        self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
+
+        if self.bpm == "all":
+            self.fftwT = np.fft.rfftfreq(self.data_len, 1.0/4)
+            self.fftwT = self.fftwT[0:int(len(self.fftwT)/4)]
+            self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
+            self.fftw_to_process = self.fftw_to_process[0:int(len(self.fftw_to_process)/4)]
+
+        else:
+            self.fftwT = np.fft.rfftfreq(self.data_len, 1.0)
+            self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
 
         if self.algType == 'None':
             self.frq_founded = 0.0
