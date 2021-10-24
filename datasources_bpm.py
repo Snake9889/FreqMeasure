@@ -25,16 +25,21 @@ class BPMData(BPMTemplate):
         else:
             bpm_channel = -1
 
+        #self.bpm_name = bpm_name
+
         bpm_data_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@s")
         bpm_numpts_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p10")
+        bpm_istart_name = '{0}{1}{2}'.format(self.bpm_channel_template, bpm_channel, "@p2") #1 - run mode, 0 - kick mode
 
         print(bpm_data_name)
         print(bpm_numpts_name)
 
         self.bpmChan = cda.VChan(bpm_data_name, max_nelems=8 * 1024 * 4, dtype=cda.DTYPE_INT32)
         self.bpmChan_numpts = cda.IChan(bpm_numpts_name)
+        self.bpmChan_istart = cda.IChan(bpm_istart_name)
 
         self.bpmChan_numpts.valueMeasured.connect(self._on_numpts_update)
+        self.bpmChan_istart.valueMeasured.connect(self._on_istart_update)
         self.bpmChan.valueMeasured.connect(self._on_signal_update)
 
     def _on_signal_update(self, chan):
@@ -54,4 +59,10 @@ class BPMData(BPMTemplate):
         self.dataI = tmp[3]
 
         self.data_ready.emit(self)
+
+    def _on_istart_update(self, chan):
+        """   """
+        self.istart = chan.val
+        #print(self.bpm_name, ":", self.istart)
+
 
