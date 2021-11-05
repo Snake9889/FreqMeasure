@@ -15,7 +15,7 @@ class HelpWidget(QWidget):
         help_icon = QIcon()
         help_icon.addFile(os.path.join(icon_path, 'etc/icons/app_icon_color.png'), QSize(32, 32))
         self.setWindowIcon(help_icon)
-        QCoreApplication.setApplicationName("Help")
+        self.setWindowTitle('Help')
 
         pixmap = QPixmap(file_name)
         self.label.setPixmap(pixmap)

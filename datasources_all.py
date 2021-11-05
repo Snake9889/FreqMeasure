@@ -27,12 +27,6 @@ class BPMDataAll(BPMTemplate):
         self.istart = [1, 1, 1, 1]
         self.particles = "e+"
 
-        # self.Data1 = None
-        # self.Data2 = None
-        # self.Data3 = None
-        # self.Data4 = None
-
-
         self.timer = QTimer()
         self.timer.timeout.connect(self.on_timer_update)
         self.def_time = self.DEFAULT_TIME

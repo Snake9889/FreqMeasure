@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>559</width>
+    <width>612</width>
     <height>710</height>
    </rect>
   </property>
@@ -32,6 +32,9 @@
    <layout class="QGridLayout" name="gridLayout" columnstretch="0,0">
     <property name="sizeConstraint">
      <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <property name="rightMargin">
+     <number>9</number>
     </property>
     <property name="bottomMargin">
      <number>3</number>
@@ -329,6 +332,12 @@
     </item>
     <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="leftMargin">
+       <number>3</number>
+      </property>
+      <property name="rightMargin">
+       <number>3</number>
+      </property>
       <item>
        <widget class="ControlWidget" name="controlWidgetX" native="true">
         <property name="sizePolicy">
@@ -395,7 +404,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>559</width>
+     <width>612</width>
      <height>30</height>
     </rect>
    </property>

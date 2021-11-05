@@ -1,11 +1,12 @@
 # This Python file uses the following encoding: utf-8
 
 import os.path
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5.QtCore import pyqtSignal, QRectF, Qt, QSettings, QSize, QPoint
 from PyQt5 import uic
 import pyqtgraph as pg
 from helpwidget import HelpWidget
+from phasewidget import PhaseWidget
 
 from statuswidget import StatusWidget
 
@@ -34,10 +35,19 @@ class MainWindow(QMainWindow):
             self.statusWidget = new_statusWidget
 
         else:
-            pass
+            """ Creating phase button """
+            old_Widget = self.statusWidget
+            self.phasebtn = QPushButton('Phase', self)
+            self.phasebtn.setCheckable(True)
+            self.phasebtn.setStyleSheet("QPushButton:checked {color: black; background-color: green;}")
+            
+            self.phase_widget = PhaseWidget(os.path.join(ui_path))
+            self.phasebtn.clicked.connect(self.phase_widget.show)
+
+            self.ui.verticalLayout.replaceWidget(old_Widget, self.phasebtn)
+            old_Widget.deleteLater()
 
         self.images_list = []
-
         self.x_rect = None
         self.fx_rect = None
         self.z_rect = None
@@ -66,6 +76,9 @@ class MainWindow(QMainWindow):
 
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
+
+        #self.phase_widget = PhaseWidget(os.path.join(ui_path))
+        #self.phasebtn.clicked.connect(self.phase_widget.show)
 
         self.actionSave.triggered.connect(self.on_save_button)
         self.actionRead.triggered.connect(self.on_read_button)
