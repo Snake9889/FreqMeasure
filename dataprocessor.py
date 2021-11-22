@@ -43,6 +43,8 @@ class DataProcessor(QObject):
 
         self.frq_founded = 0.0
 
+        self.momentum = None
+
         self.warning = 0
         self.warningText = ""
 
@@ -115,6 +117,13 @@ class DataProcessor(QObject):
 
         if self.algType == 'Naff':
             self.frq_founded = self.on_naff_method()
+
+        if self.type_to_process == 'X':
+            self.momentum = self.momentum_calc(self.dataX)
+        elif self.type_to_process == 'Z':
+            self.momentum = self.momentum_calc(self.dataZ)
+        else:
+            return
 
         self.data_processed.emit(self)
 
@@ -229,3 +238,18 @@ class DataProcessor(QObject):
         self.frq_founded = self.alpha[ind_alpha]
 
         return self.frq_founded
+
+    def momentum_calc(self, Mas):
+        """   """
+        newMass = np.zeros(len(Mas) - 1)
+        for i in range (len(Mas) - 1):
+            if np.sin(2 * np.pi * self.frq_founded) == 0:
+                newMass[i] =0
+            else:
+                newMass[i] = (Mas[i+1] - Mas[i] * np.cos(2 * np.pi * self.frq_founded))/np.sin(2 * np.pi * self.frq_founded)
+
+        return newMass
+
+
+
+        

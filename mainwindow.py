@@ -7,7 +7,6 @@ from PyQt5 import uic
 import pyqtgraph as pg
 from helpwidget import HelpWidget
 from phasewidget import PhaseWidget
-
 from statuswidget import StatusWidget
 
 
@@ -38,9 +37,6 @@ class MainWindow(QMainWindow):
             """ Creating phase button """
             old_Widget = self.statusWidget
             self.phasebtn = QPushButton('Phase', self)
-            self.phasebtn.setCheckable(True)
-            self.phasebtn.setStyleSheet("QPushButton:checked {color: black; background-color: green;}")
-            
             self.phase_widget = PhaseWidget(os.path.join(ui_path))
             self.phasebtn.clicked.connect(self.phase_widget.show)
 
@@ -76,9 +72,6 @@ class MainWindow(QMainWindow):
 
         self.controlWidgetZ.method_changed_str.connect(self.data_proc_Z.on_method_changed)
         self.controlWidgetZ.boards_changed.connect(self.data_proc_Z.on_boards_changed)
-
-        #self.phase_widget = PhaseWidget(os.path.join(ui_path))
-        #self.phasebtn.clicked.connect(self.phase_widget.show)
 
         self.actionSave.triggered.connect(self.on_save_button)
         self.actionRead.triggered.connect(self.on_read_button)
@@ -250,6 +243,20 @@ class MainWindow(QMainWindow):
         else:
             self.ui.frq_z.setText('Unexpected value!')
 
+    def on_phase_status_X(self, data_processor):
+        """   """
+        if self.bpm == "all":
+            pass
+        else:
+            self.phase_widget.phase_plot_X(data_processor)
+
+    def on_phase_status_Z(self, data_processor):
+        """   """
+        if self.bpm == "all":
+            pass
+        else:
+            self.phase_widget.phase_plot_Z(data_processor)
+
     def save_settings(self):
         """   """
         settings = QSettings()
@@ -286,8 +293,3 @@ class MainWindow(QMainWindow):
         self.ui.plotFX.setRange(xRange=self.fx_rect[0], yRange=self.fx_rect[1])
         self.ui.plotFZ.setRange(xRange=self.fz_rect[0], yRange=self.fz_rect[1])
 
-# if __name__ == "__main__":
-#     app = QApplication([])
-#     window = MainWindow()
-#     window.show()
-#     sys.exit(app.exec_())
