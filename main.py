@@ -75,7 +75,6 @@ if __name__ == "__main__":
     data_proc_X.data_processed.connect(mw.on_phase_status_X)
     data_proc_Z.data_processed.connect(mw.on_phase_status_Z)
 
-
     mw.controlWidgetX.signature.connect(data_source.force_data_ready)
     mw.controlWidgetZ.signature.connect(data_source.force_data_ready)
 
