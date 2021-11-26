@@ -20,8 +20,8 @@ class PhaseWidget(QWidget):
         self.setWindowTitle('Phase')
 
         self.plots_customization()
-        self.data_curve_X = self.ui.PhaseX.scatterPlot(pen='k', title='X_phase', symbol='o', size=4, brush='r')
-        self.data_curve_Z = self.ui.PhaseZ.scatterPlot(pen='k', title='Z_phase', symbol='o', size=4, brush='b')
+        self.data_curve_X = self.ui.PhaseX.scatterPlot(pen='k', title='X_phase', symbol='o', size=3, brush='r')
+        self.data_curve_Z = self.ui.PhaseZ.scatterPlot(pen='k', title='Z_phase', symbol='o', size=3, brush='b')
 
     @staticmethod
     def customise_label(plot, text_item, html_str):
@@ -38,14 +38,16 @@ class PhaseWidget(QWidget):
         plot = self.ui.PhaseX
         self.customize_plot(plot)
         self.customise_label(plot, pg.TextItem(), label_str_x.format("X"))
-        self.PhaseX.setXRange(-6, 6)
-        self.PhaseX.setYRange(-6, 6)
+        #self.PhaseX.setXRange(-6, 6)
+        #self.PhaseX.setYRange(-6, 6)
+        #self.PhaseX.setAspectLocked(True)
 
         plot = self.ui.PhaseZ
         self.customize_plot(plot)
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
-        self.PhaseX.setXRange(-1, 3)
-        self.PhaseX.setYRange(0, 4)
+        self.PhaseZ.setXRange(-1, 3)
+        self.PhaseZ.setYRange(0, 4)
+        self.PhaseZ.setAspectLocked(True)
 
     @staticmethod
     def customize_plot(plot):
