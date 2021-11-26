@@ -1,9 +1,8 @@
-import sys
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
-from PyQt5.QtCore import QSize, QCoreApplication
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 import os.path
 from PyQt5 import uic
 
@@ -21,8 +20,8 @@ class PhaseWidget(QWidget):
         self.setWindowTitle('Phase')
 
         self.plots_customization()
-        self.data_curve_X = self.ui.PhaseX.plot(pen='r', title='X_phase')
-        self.data_curve_Z = self.ui.PhaseZ.plot(pen='b', title='Z_phase')
+        self.data_curve_X = self.ui.PhaseX.scatterPlot(pen='k', title='X_phase', symbol='o', size=4, brush='r')
+        self.data_curve_Z = self.ui.PhaseZ.scatterPlot(pen='k', title='Z_phase', symbol='o', size=4, brush='b')
 
     @staticmethod
     def customise_label(plot, text_item, html_str):
@@ -39,10 +38,14 @@ class PhaseWidget(QWidget):
         plot = self.ui.PhaseX
         self.customize_plot(plot)
         self.customise_label(plot, pg.TextItem(), label_str_x.format("X"))
+        self.PhaseX.setXRange(-6, 6)
+        self.PhaseX.setYRange(-6, 6)
 
         plot = self.ui.PhaseZ
         self.customize_plot(plot)
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
+        self.PhaseX.setXRange(-1, 3)
+        self.PhaseX.setYRange(0, 4)
 
     @staticmethod
     def customize_plot(plot):
@@ -57,9 +60,8 @@ class PhaseWidget(QWidget):
     def phase_plot_X(self, data_processor):
         """   """
         self.data_curve_X.setData(data_processor.dataX[0:len(data_processor.momentum)], data_processor.momentum)
-        #self.fx_rect = self.ui.PhaseX.viewRange()
 
     def phase_plot_Z(self, data_processor):
         """   """
         self.data_curve_Z.setData(data_processor.dataZ[0:len(data_processor.momentum)], data_processor.momentum)
-        #self.fz_rect = self.ui.PhaseZ.viewRange()
+
