@@ -24,6 +24,7 @@ if __name__ == "__main__":
     QSettings.setDefaultFormat(QSettings.IniFormat)
 
     app = QApplication(sys.argv)
+    app.setStyle('Cleanlooks')
 
     argument_parser = TerminalParser()
     bpm_name_parsed = argument_parser.bpm_name_parsed
@@ -31,7 +32,11 @@ if __name__ == "__main__":
 
     if bpm_name_parsed == "model":
         from datasources import BPMData
-        data_source = BPMData(2048)
+        data_source = BPMData()
+
+    elif bpm_name_parsed == "all":
+        from datasources_all import BPMDataAll
+        data_source = BPMDataAll()
 
     else:
         from datasources_bpm import BPMData
@@ -45,7 +50,7 @@ if __name__ == "__main__":
     data_proc_Z = DataProcessor("Z")
     settingsControl = SettingsControl()
 
-    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl)
+    mw = MainWindow(data_source, data_proc_X, data_proc_Z, settingsControl, bpm_name_parsed)
     mw.setWindowTitle('BTMS ({})'.format(bpm_name_parsed))
 
     icon_path = os.path.dirname(os.path.abspath(__file__))
@@ -58,13 +63,18 @@ if __name__ == "__main__":
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
 
+
     settingsControl.add_object(mw)
     settingsControl.add_object(mw.controlWidgetX)
     settingsControl.add_object(mw.controlWidgetZ)
+    settingsControl.add_object(data_source)
     settingsControl.read_settings()
 
     data_proc_X.data_processed.connect(mw.on_freq_status_X)
     data_proc_Z.data_processed.connect(mw.on_freq_status_Z)
+    data_proc_X.data_processed.connect(mw.on_phase_status_X)
+    data_proc_Z.data_processed.connect(mw.on_phase_status_Z)
+
 
     mw.controlWidgetX.signature.connect(data_source.force_data_ready)
     mw.controlWidgetZ.signature.connect(data_source.force_data_ready)

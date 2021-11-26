@@ -19,6 +19,7 @@ class DataProcessor(QObject):
         self.windowType = 'None'
         self.data_len = data_len
         self.algType = argument_parser.method_name_parsed
+        self.bpm = argument_parser.bpm_name_parsed
         self.window = None
 
         self.regen_wind(self.windowType)
@@ -41,6 +42,8 @@ class DataProcessor(QObject):
         self.falpha = None
 
         self.frq_founded = 0.0
+
+        self.momentum = None
 
         self.warning = 0
         self.warningText = ""
@@ -74,6 +77,7 @@ class DataProcessor(QObject):
     def on_data_recv(self, data_source):
         """   """
         self.data_len = data_source.data_len
+
         self.regen_wind(self.windowType)
 
         self.dataT = data_source.dataT
@@ -89,8 +93,16 @@ class DataProcessor(QObject):
             return
 
         self.data_to_process = self.data_to_process * self.window
-        self.fftwT = np.fft.rfftfreq(self.data_len, 1.)
-        self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
+
+        if self.bpm == "all":
+            self.fftwT = np.fft.rfftfreq(self.data_len, 1.0/4)
+            self.fftwT = self.fftwT[0:int(len(self.fftwT)/4)]
+            self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
+            self.fftw_to_process = self.fftw_to_process[0:int(len(self.fftw_to_process)/4)]
+
+        else:
+            self.fftwT = np.fft.rfftfreq(self.data_len, 1.0)
+            self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
 
         if self.algType == 'None':
             self.frq_founded = 0.0
@@ -105,6 +117,13 @@ class DataProcessor(QObject):
 
         if self.algType == 'Naff':
             self.frq_founded = self.on_naff_method()
+
+        if self.type_to_process == 'X':
+            self.momentum = self.momentum_calc(self.dataX)
+        elif self.type_to_process == 'Z':
+            self.momentum = self.momentum_calc(self.dataZ)
+        else:
+            return
 
         self.data_processed.emit(self)
 
@@ -219,3 +238,18 @@ class DataProcessor(QObject):
         self.frq_founded = self.alpha[ind_alpha]
 
         return self.frq_founded
+
+    def momentum_calc(self, Mas):
+        """   """
+        newMass = np.zeros(len(Mas) - 1)
+        for i in range (len(Mas) - 1):
+            if np.sin(2 * np.pi * self.frq_founded) == 0:
+                newMass[i] =0
+            else:
+                newMass[i] = (Mas[i+1] - Mas[i] * np.cos(2 * np.pi * self.frq_founded))/np.sin(2 * np.pi * self.frq_founded)
+
+        return newMass
+
+
+
+        

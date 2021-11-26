@@ -133,10 +133,6 @@ class ControlWidget(QWidget):
 
     def save_settings(self):
         """   """
-        if self.str_id == self.default_str_id:
-            print(self.default_str_id)
-            return
-
         settings = QSettings()
         settings.beginGroup(self.bpm)
         settings.beginGroup(self.str_id)
