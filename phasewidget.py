@@ -5,6 +5,8 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 import os.path
 from PyQt5 import uic
+from scipy.spatial import distance
+import numpy as np
 
 class PhaseWidget(QWidget):
     """   """
@@ -18,6 +20,11 @@ class PhaseWidget(QWidget):
         phase_icon.addFile(os.path.join(icon_path, 'etc/icons/Psi.png'), QSize(32, 32))
         self.setWindowIcon(phase_icon)
         self.setWindowTitle('Phase')
+
+        self.X_sort = None
+        self.PX_sort = None
+        self.Z_sort = None
+        self.PZ_sort = None
 
         self.plots_customization()
         self.data_curve_X = self.ui.PhaseX.scatterPlot(pen='k', title='X_phase', symbol='o', size=3, brush='r')
@@ -45,8 +52,8 @@ class PhaseWidget(QWidget):
         plot = self.ui.PhaseZ
         self.customize_plot(plot)
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
-        self.PhaseZ.setXRange(-2, 4)
-        self.PhaseZ.setYRange(-1, 3)
+        #self.PhaseZ.setXRange(-2, 4)
+        #self.PhaseZ.setYRange(-1, 3)
         self.PhaseZ.setAspectLocked(True)
 
     @staticmethod
@@ -61,9 +68,32 @@ class PhaseWidget(QWidget):
 
     def phase_plot_X(self, data_processor):
         """   """
-        self.data_curve_X.setData(data_processor.dataX[0:len(data_processor.momentum)], data_processor.momentum)
+        self.X_sort, self.PX_sort = self.reduction(data_processor.dataX_averaged[0:len(data_processor.momentum)], data_processor.momentum)
+        self.data_curve_X.setData(self.X_sort, self.PX_sort)
 
     def phase_plot_Z(self, data_processor):
         """   """
-        self.data_curve_Z.setData(data_processor.dataZ[0:len(data_processor.momentum)], data_processor.momentum)
+        self.Z_sort, self.PZ_sort = self.reduction(data_processor.dataZ_averaged[0:len(data_processor.momentum)], data_processor.momentum)
+        self.data_curve_Z.setData(self.Z_sort, self.PZ_sort)
+        #self.data_curve_Z.setData(data_processor.dataZ_averaged[0:len(data_processor.momentum)], data_processor.momentum)
+
+    def reduction(self, M1, M2):
+        """   """
+        Mas = np.zeros(len(M2))
+        for i in range(len(M2)):
+            Mas[i] = distance.euclidean([0, 0], [M1[i], M2[i]])
+
+        if len(M2) >= 500:
+            border = int(0.1 * len(M2))
+        else:
+            border = 100
+
+        indecies = np.zeros(border)
+        MasCoord = np.zeros(border)
+        MasP = np.zeros(border)
+        indecies = np.argsort(Mas)[-border:]
+        for i in range (0, border):
+            MasCoord[i] = M1[indecies[i]]
+            MasP[i] = M2[indecies[i]]
+        return MasCoord, MasP
 
