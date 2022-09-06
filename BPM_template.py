@@ -1,10 +1,6 @@
 #
 #
 from PyQt5.QtCore import pyqtSignal, QObject
-import numpy as np
-import pycx4.qcda as cda
-from PyQt5.QtWidgets import QLabel
-
 
 class BPMTemplate(QObject):
     """   """
