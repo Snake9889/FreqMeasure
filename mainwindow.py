@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
         self.customize_plot(plot)
         self.customise_label(plot, pg.TextItem(), label_str_z.format("Az"))
 
-        self.FZ = pg.LinearRegionItem([self.controlWidgetX.lboard, self.controlWidgetZ.rboard])
+        self.FZ = pg.LinearRegionItem([self.controlWidgetZ.lboard, self.controlWidgetZ.rboard])
         self.FZ.setBounds([0,0.5])
         plot.addItem(self.FZ)
         self.FZ.sigRegionChangeFinished.connect(self.region_Z_changed)
