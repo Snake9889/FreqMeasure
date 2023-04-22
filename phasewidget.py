@@ -84,7 +84,7 @@ class PhaseWidget(QWidget):
             Mas[i] = distance.euclidean([0, 0], [M1[i], M2[i]])
 
         if len(M2) >= 500:
-            border = int(0.1 * len(M2))
+            border = int(1 * len(M2))
         else:
             border = 100
 
