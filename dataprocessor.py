@@ -119,9 +119,11 @@ class DataProcessor(QObject):
             self.frq_founded = self.on_naff_method()
 
         if self.type_to_process == 'X':
-            self.momentum = self.momentum_calc(self.dataX)
+            self.dataX_averaged = self.dataX - np.mean(self.dataX)
+            self.momentum = self.momentum_calc(self.dataX_averaged)
         elif self.type_to_process == 'Z':
-            self.momentum = self.momentum_calc(self.dataZ)
+            self.dataZ_averaged = self.dataZ - np.mean(self.dataZ)
+            self.momentum = self.momentum_calc(self.dataZ_averaged)
         else:
             return
 
@@ -252,4 +254,4 @@ class DataProcessor(QObject):
 
 
 
-        
+

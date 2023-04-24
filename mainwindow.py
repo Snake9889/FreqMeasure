@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         ui_path = os.path.dirname(os.path.abspath(__file__))
-        self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow.ui'), self)
+        self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow_2.ui'), self)
 
         self.window_str = "None"
         self.bpm = bpm_name
@@ -44,9 +44,9 @@ class MainWindow(QMainWindow):
             old_Widget.deleteLater()
 
         self.images_list = []
-        self.x_rect = None
+        self.sig_rect = None
         self.fx_rect = None
-        self.z_rect = None
+        self.i_rect = None
         self.fz_rect = None
 
         self.data_source = data_source
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         self.settingsControl = settings_control
 
         self.data_proc_X.data_processed.connect(self.on_data2_ready)
-        self.data_proc_Z.data_processed.connect(self.on_data4_ready)
+        self.data_proc_Z.data_processed.connect(self.on_data3_ready)
 
         self.controlWidgetX.window_changed_str.connect(self.data_proc_X.on_wind_changed)
         self.controlWidgetX.groupBox.setTitle("X Controller")
@@ -90,9 +90,10 @@ class MainWindow(QMainWindow):
 
         self.plots_customization()
 
-        self.data_curve1 = self.ui.plotX.plot(pen='r', title='X_plot')
+        self.data_curve11 = self.ui.plotSig.plot(pen='r', title='X_plot')
+        self.data_curve12 = self.ui.plotSig.plot(pen='b', title='Z_plot')
         self.data_curve2 = self.ui.plotFX.plot(pen='r', title='Fourier Transform X_plot')
-        self.data_curve3 = self.ui.plotZ.plot(pen='b', title='Z_plot')
+        self.data_curve3 = self.ui.plotI.plot(pen='k', title='I_plot')
         self.data_curve4 = self.ui.plotFZ.plot(pen='b', title='Fourier Transform Z_plot')
 
     @staticmethod
@@ -106,14 +107,15 @@ class MainWindow(QMainWindow):
         """   """
         label_str_x = "<span style=\"color:red; font-size:16px\">{}</span>"
         label_str_z = "<span style=\"color:blue;font-size:16px\">{}</span>"
+        label_str_i = "<span style=\"color:black;font-size:16px\">{}</span>"
 
-        plot = self.ui.plotX
+        plot = self.ui.plotSig
         self.customize_plot(plot)
-        self.customise_label(plot, pg.TextItem(), label_str_x.format("X"))
+        self.customise_label(plot, pg.TextItem(), label_str_i.format("Sig"))
 
-        plot = self.ui.plotZ
+        plot = self.ui.plotI
         self.customize_plot(plot)
-        self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
+        self.customise_label(plot, pg.TextItem(), label_str_i.format("I"))
 
         plot = self.ui.plotFX
         self.customize_plot(plot)
@@ -207,20 +209,21 @@ class MainWindow(QMainWindow):
 
     def on_data1_ready(self, data_source):
         """   """
-        self.data_curve1.setData(data_source.dataT, data_source.dataX)
-        self.x_rect = self.ui.plotX.viewRange()
+        self.data_curve11.setData(data_source.dataT, data_source.dataX)
+        self.data_curve12.setData(data_source.dataT, data_source.dataZ)
+        self.sig_rect = self.ui.plotSig.viewRange()
 
-    def on_data3_ready(self, data_source):
+    def on_data4_ready(self, data_source):
         """   """
-        self.data_curve3.setData(data_source.dataT, data_source.dataZ)
-        self.z_rect = self.ui.plotZ.viewRange()
+        self.data_curve3.setData(data_source.dataT, data_source.dataI)
+        self.i_rect = self.ui.plotI.viewRange()
 
     def on_data2_ready(self, data_processor):
         """   """
         self.data_curve2.setData(data_processor.fftwT, data_processor.fftw_to_process)
         self.fx_rect = self.ui.plotFX.viewRange()
 
-    def on_data4_ready(self, data_processor):
+    def on_data3_ready(self, data_processor):
         """   """
         self.data_curve4.setData(data_processor.fftwT, data_processor.fftw_to_process)
         self.fz_rect = self.ui.plotFZ.viewRange()
@@ -262,8 +265,8 @@ class MainWindow(QMainWindow):
         settings = QSettings()
         settings.beginGroup(self.bpm)
         settings.beginGroup("Plots")
-        settings.setValue("x_zoom", self.x_rect)
-        settings.setValue("z_zoom", self.z_rect)
+        settings.setValue("sig_zoom", self.sig_rect)
+        settings.setValue("i_zoom", self.i_rect)
         settings.setValue("fx_zoom", self.fx_rect)
         settings.setValue("fz_zoom", self.fz_rect)
         settings.setValue('size', self.size())
@@ -278,17 +281,17 @@ class MainWindow(QMainWindow):
         settings = QSettings()
         settings.beginGroup(self.bpm)
         settings.beginGroup("Plots")
-        self.x_rect = settings.value("x_zoom", rect_def)
+        self.sig_rect = settings.value("sig_zoom", rect_def)
         self.fx_rect = settings.value("fx_zoom", rect_def)
-        self.z_rect = settings.value("z_zoom", rect_def)
+        self.i_rect = settings.value("i_zoom", rect_def)
         self.fz_rect = settings.value("fz_zoom", rect_def)
         self.resize(settings.value('size', QSize(500, 500)))
         self.move(settings.value('pos', QPoint(60, 60)))
         settings.endGroup()
         settings.endGroup()
 
-        self.ui.plotX.setRange(xRange=self.x_rect[0], yRange=self.x_rect[1])
-        self.ui.plotZ.setRange(xRange=self.z_rect[0], yRange=self.z_rect[1])
+        self.ui.plotSig.setRange(xRange=self.sig_rect[0], yRange=self.sig_rect[1])
+        self.ui.plotI.setRange(xRange=self.i_rect[0], yRange=self.i_rect[1])
 
         self.ui.plotFX.setRange(xRange=self.fx_rect[0], yRange=self.fx_rect[1])
         self.ui.plotFZ.setRange(xRange=self.fz_rect[0], yRange=self.fz_rect[1])

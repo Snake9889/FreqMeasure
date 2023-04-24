@@ -59,7 +59,7 @@ if __name__ == "__main__":
     mw.setWindowIcon(mw_icon)
 
     data_source.data_ready.connect(mw.on_data1_ready)
-    data_source.data_ready.connect(mw.on_data3_ready)
+    data_source.data_ready.connect(mw.on_data4_ready)
     data_source.data_ready.connect(data_proc_X.on_data_recv)
     data_source.data_ready.connect(data_proc_Z.on_data_recv)
 
