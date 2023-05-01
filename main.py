@@ -79,4 +79,5 @@ if __name__ == "__main__":
     mw.controlWidgetZ.signature.connect(data_source.force_data_ready)
 
     mw.show()
+    print(mw.scale_x, mw.scale_z, mw.fx_rect, mw.fz_rect)
     sys.exit(app.exec_())

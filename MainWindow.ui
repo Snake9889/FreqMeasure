@@ -53,7 +53,7 @@
          <number>3</number>
         </property>
         <item>
-         <widget class="PlotWidget" name="plotX">
+         <widget class="PlotWidget" name="plotSig">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -96,7 +96,7 @@
          </widget>
         </item>
         <item>
-         <widget class="PlotWidget" name="plotZ">
+         <widget class="PlotWidget" name="plotI">
           <property name="enabled">
            <bool>true</bool>
           </property>

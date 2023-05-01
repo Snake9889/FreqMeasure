@@ -18,9 +18,11 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         ui_path = os.path.dirname(os.path.abspath(__file__))
-        self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow_2.ui'), self)
+        self.ui = uic.loadUi(os.path.join(ui_path, 'MainWindow.ui'), self)
 
         self.window_str = "None"
+        self.scale_x = "None"
+        self.scale_z = "None"
         self.bpm = bpm_name
 
         if self.bpm == "all":
@@ -165,9 +167,11 @@ class MainWindow(QMainWindow):
         """   """
         scale = control_widget.scale
         if control_widget.str_id == "Data_X":
-            self.plot_mode(self.ui.plotFX, scale)
+            self.scale_x = scale
+            self.plot_mode(self.ui.plotFX, self.scale_x)
         elif control_widget.str_id == "Data_Z":
-            self.plot_mode(self.ui.plotFZ, scale)
+            self.scale_z = scale
+            self.plot_mode(self.ui.plotFZ, self.scale_z)
         else:
             print("Error in control_widget!")
 
@@ -267,6 +271,8 @@ class MainWindow(QMainWindow):
         settings.beginGroup("Plots")
         settings.setValue("sig_zoom", self.sig_rect)
         settings.setValue("i_zoom", self.i_rect)
+        settings.setValue("scale_x", self.scale_x)
+        settings.setValue("scale_z", self.scale_z)
         settings.setValue("fx_zoom", self.fx_rect)
         settings.setValue("fz_zoom", self.fz_rect)
         settings.setValue('size', self.size())
@@ -277,18 +283,24 @@ class MainWindow(QMainWindow):
 
     def read_settings(self):
         """   """
-        rect_def = [[0, 1], [0, 1]]
+        rect_def = [[0, 0.5], [0, 1]]
         settings = QSettings()
         settings.beginGroup(self.bpm)
         settings.beginGroup("Plots")
         self.sig_rect = settings.value("sig_zoom", rect_def)
-        self.fx_rect = settings.value("fx_zoom", rect_def)
         self.i_rect = settings.value("i_zoom", rect_def)
+        self.scale_x = settings.value("scale_x", "Normal")
+        self.scale_z = settings.value("scale_z", "Normal")
+        self.fx_rect = settings.value("fx_zoom", rect_def)
         self.fz_rect = settings.value("fz_zoom", rect_def)
         self.resize(settings.value('size', QSize(500, 500)))
         self.move(settings.value('pos', QPoint(60, 60)))
         settings.endGroup()
         settings.endGroup()
+
+        print(self.scale_x, self.scale_z, self.fx_rect, self.fz_rect)
+        self.plot_mode(self.ui.plotFX, self.scale_x)
+        self.plot_mode(self.ui.plotFZ, self.scale_z)
 
         self.ui.plotSig.setRange(xRange=self.sig_rect[0], yRange=self.sig_rect[1])
         self.ui.plotI.setRange(xRange=self.i_rect[0], yRange=self.i_rect[1])
