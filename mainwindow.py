@@ -231,6 +231,9 @@ class MainWindow(QMainWindow):
         """   """
         self.data_curve4.setData(data_processor.fftwT, data_processor.fftw_to_process)
         self.fz_rect = self.ui.plotFZ.viewRange()
+        print(self.ui.plotFZ.getAxis('left'))
+        print(self.ui.plotFZ.viewRect(), 'rect')
+        # print(self.ui.plotFZ.viewRange(), 'range')
 
     def on_freq_status_X(self, data_processor):
         """   """
@@ -306,5 +309,8 @@ class MainWindow(QMainWindow):
         self.ui.plotI.setRange(xRange=self.i_rect[0], yRange=self.i_rect[1])
 
         self.ui.plotFX.setRange(xRange=self.fx_rect[0], yRange=self.fx_rect[1])
-        self.ui.plotFZ.setRange(xRange=self.fz_rect[0], yRange=self.fz_rect[1])
+        if self.scale_z == "Log_Y":
+            self.ui.plotFZ.setRange(xRange=self.fz_rect[0], yRange=list(map(lambda x:pow(10,x), self.fz_rect[1])))
+        else:
+            self.ui.plotFZ.setRange(xRange=self.fz_rect[0], yRange=self.fz_rect[1])
 
