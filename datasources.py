@@ -8,7 +8,7 @@ class BPMData(BPMTemplate):
     """   """
 
     def __init__(self, bpm_name='', parent=None):
-        super(BPMData, self).__init__(bpm_name, parent)
+        super().__init__(bpm_name, parent)
 
         self.bpm_phase = 0.0;
 
