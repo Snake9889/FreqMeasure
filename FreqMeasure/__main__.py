@@ -3,10 +3,13 @@
 from PyQt5.QtCore import QCoreApplication, QSettings, QSize
 from PyQt5.QtGui import QIcon
 import signal
-from mainwindow import *
-from dataprocessor import DataProcessor
-from settingscontrol import SettingsControl
-from command_parser import TerminalParser
+from FreqMeasure.Modules.MainWindow.mainwindow import *
+from FreqMeasure.Modules.dataprocessor import DataProcessor
+from FreqMeasure.Modules.settingscontrol import SettingsControl
+from FreqMeasure.Modules.command_parser import TerminalParser
+from FreqMeasure.Modules.DataSources.datasources_all import BPMDataAll
+import FreqMeasure.Modules.DataSources.datasources_bpm as ds_bpm
+import FreqMeasure.Modules.DataSources.datasources as ds_model
 
 pg.setConfigOption('background', 'w')
 pg.setConfigOption('foreground', 'k')
@@ -31,16 +34,13 @@ if __name__ == "__main__":
     data_source = None
 
     if bpm_name_parsed == "model":
-        from datasources import BPMData
-        data_source = BPMData()
+        data_source = ds_model.BPMData()
 
     elif bpm_name_parsed == "all":
-        from datasources_all import BPMDataAll
         data_source = BPMDataAll()
 
     else:
-        from datasources_bpm import BPMData
-        data_source = BPMData(bpm_name=bpm_name_parsed)
+        data_source = ds_bpm.BPMData(bpm_name=bpm_name_parsed)
 
     if data_source is None:
         print("Data source doesn't exists!!! You can't use this program!!!")

@@ -485,7 +485,7 @@
   <customwidget>
    <class>ControlWidget</class>
    <extends>QWidget</extends>
-   <header>controlwidget</header>
+   <header>FreqMeasure.Modules.MainWindow.ControlWidget.controlwidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
