@@ -1,2 +1,2 @@
 # FreqMeasure
-# The BINP programm for tune determination
+# Programm for tune determination
