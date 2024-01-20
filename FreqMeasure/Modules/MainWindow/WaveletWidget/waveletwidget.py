@@ -17,7 +17,6 @@ class MplFig(FigureCanvasQTAgg):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
-        # self.axes.plot([0,1,2,3,4], [10,1,20,3,40])
         super(MplFig, self).__init__(fig)
 
 
@@ -109,13 +108,9 @@ class WaveletWidget(QWidget):
         dt = 1/len(dataT)
         frqs = np.fft.rfftfreq(len(dataT), 1.0)[1:]
         scales = pywt.frequency2scale('mexh', frqs)
-        # print(scales)
         [coefficients, frequencies] = pywt.cwt(dataXZ, scales, self.wavelet, dt)
-        frequencies = np.fft.rfftfreq(len(dataT), 1.0)[1:]
-        print(frequencies)
         
-        
-        return dataT, coefficients, frequencies
+        return dataT, coefficients, frqs
         
         
         
