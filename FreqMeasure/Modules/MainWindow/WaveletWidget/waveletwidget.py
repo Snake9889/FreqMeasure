@@ -1,15 +1,30 @@
-from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph as pg
+from PyQt5 import uic
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, pyqtSignal
 from PyQt5.QtGui import QIcon
 import os.path
-from PyQt5 import uic
 import pywt
+import matplotlib
+matplotlib.use('Qt5Agg')
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 import numpy as np
+
+class MplFig(FigureCanvasQTAgg):
+    """   """
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        # self.axes.plot([0,1,2,3,4], [10,1,20,3,40])
+        super(MplFig, self).__init__(fig)
+
 
 class WaveletWidget(QWidget):
     """   """
+    wavelet_changed_str = pyqtSignal(str)
+    
     def __init__(self, file_name):
         super(WaveletWidget, self).__init__()
         ui_path = os.path.dirname(os.path.abspath(__file__))
@@ -20,93 +35,87 @@ class WaveletWidget(QWidget):
         phase_icon.addFile(os.path.join(icon_path, 'etc/icons/Psi.png'), QSize(32, 32))
         self.setWindowIcon(phase_icon)
         self.setWindowTitle('Wavelet')
-
-        self.X_sort = None
-        self.FX_sort = None
-        self.Z_sort = None
-        self.FZ_sort = None
-
-        self.plots_customization()
-        self.data_curve_X = self.ui.WaveletX.scatterPlot(pen='k', title='X_phase', symbol='o', size=3, brush='r')
-        self.data_curve_Z = self.ui.WaveletZ.scatterPlot(pen='k', title='Z_phase', symbol='o', size=3, brush='b')
+        
+        self.ui.WaveletX = self.widgets_replaced(self.ui.WaveletX)
+        self.ui.WaveletZ = self.widgets_replaced(self.ui.WaveletZ)
+        
+        self.wavelet = "mexh"
+        self.dataT = None
+        self.dataWX = None
+        self.dataFX = None
+        self.dataWZ = None
+        self.dataFZ = None
+        
+    def widgets_replaced(self, widget):
+        """   """
+        old_Widget = widget
+        widget = MplFig(self, width=5, height=4, dpi=100)
+        self.ui.verticalLayout.replaceWidget(old_Widget, widget)
+        old_Widget.deleteLater()
+        return widget
 
     def on_wavelet_checked(self, state):
         """   """
         if state == 0:
-            self.window = "None"
+            self.wavelet = "mexh"
         elif state == 1:
-            self.window = "Hann"
+            self.wavelet = "cmorl"
         elif state == 2:
-            self.window = "Hamming"
+            self.wavelet = "gausP"
         else:
-            self.window = "None"
+            self.wavelet = "mexh"
 
-        self.window_changed_str.emit(self.window)
+        self.wavelet_changed_str.emit(self.wavelet)
 
-    @staticmethod
-    def customise_label(plot, text_item, html_str):
+    def wavelet_plot_X(self, data_source):
         """   """
-        plot_vb = plot.getViewBox()
-        text_item.setHtml(html_str)
-        text_item.setParentItem(plot_vb)
+        widget = self.ui.WaveletX
+        title = 'Wavelet Transform of X-signal'
+        cmap = plt.cm.seismic
+        
+        self.dataT, self.dataWX, self.dataFX = self.cwt_analysis(data_source.dataT, data_source.dataX)
+        
+        self.update_plot(widget, self.dataT, self.dataWX, self.dataFX, cmap, title)
 
-    def plots_customization(self):
+
+    def wavelet_plot_Z(self, data_source):
         """   """
-        label_str_x = "<span style=\"color:red; font-size:16px\">{}</span>"
-        label_str_z = "<span style=\"color:blue;font-size:16px\">{}</span>"
+        widget = self.ui.WaveletZ
+        title = 'Wavelet Transform of Z-signal'
+        cmap = 'jet'
+        
+        self.dataT, self.dataWZ, self.dataFZ = self.cwt_analysis(data_source.dataT, data_source.dataZ)
+        
+        self.update_plot(widget, self.dataT, self.dataWZ, self.dataFZ, cmap, title)
+        # widget.axes.contourf(self.dataT, self.dataFZ, np.log2((abs(self.dataWZ))**2),
+        #                       cmap=cmap, levels=40)
+    
+        # widget.axes.set_title('Wavelet Transform (Power Spectrum) of signal-Z', fontsize=15)
+        # widget.axes.set_ylabel('Frequency', fontsize=13)
+        # widget.axes.set_xlabel('Turnover', fontsize=13)
 
-        plot = self.ui.WaveletX
-        self.customize_plot(plot)
-        self.customise_label(plot, pg.TextItem(), label_str_x.format("X"))
-        #self.PhaseX.setXRange(-6, 6)
-        #self.PhaseX.setYRange(-6, 6)
-        self.PhaseX.setAspectLocked(True)
+    def update_plot(self, widget, dataT, dataW, dataF, cmap, title):
 
-        plot = self.ui.WaveletZ
-        self.customize_plot(plot)
-        self.customise_label(plot, pg.TextItem(), label_str_z.format("Z"))
-        #self.PhaseZ.setXRange(-2, 4)
-        #self.PhaseZ.setYRange(-1, 3)
-        self.PhaseZ.setAspectLocked(True)
+        widget.axes.cla()
+        widget.axes.contourf(dataT, dataF, np.log2((abs(dataW))**2),
+                             cmap=cmap, levels=40)
+        widget.axes.set_title(title, fontsize=15)
+        widget.axes.set_ylabel('Frequency', fontsize=13)
+        # widget.axes.set_xlabel('Turnover', fontsize=13)
+        widget.draw()    
 
-    @staticmethod
-    def customize_plot(plot):
+    def cwt_analysis(self, dataT, dataXZ):
         """   """
-        plot.setBackground('w')
-        plot.showAxis('top')
-        plot.showAxis('right')
-        plot.getAxis('top').setStyle(showValues=False)
-        plot.getAxis('right').setStyle(showValues=False)
-        plot.showGrid(x=True, y=True)
-
-    def wavelet_plot_X(self, data_processor):
-        """   """
-        self.X_sort, self.PX_sort = self.reduction(data_processor.dataX_averaged[0:len(data_processor.momentum)], data_processor.momentum)
-        self.data_curve_X.setData(self.X_sort, self.PX_sort)
-
-    def wavelet_plot_Z(self, data_processor):
-        """   """
-        self.Z_sort, self.PZ_sort = self.reduction(data_processor.dataZ_averaged[0:len(data_processor.momentum)], data_processor.momentum)
-        self.data_curve_Z.setData(self.Z_sort, self.PZ_sort)
-        #self.data_curve_Z.setData(data_processor.dataZ_averaged[0:len(data_processor.momentum)], data_processor.momentum)
-
-    def reduction(self, M1, M2):
-        """   """
-        Mas = np.zeros(len(M2))
-        for i in range(len(M2)):
-            Mas[i] = distance.euclidean([0, 0], [M1[i], M2[i]])
-
-        if len(M2) >= 500:
-            border = int(1 * len(M2))
-        else:
-            border = 100
-
-        indecies = np.zeros(border)
-        MasCoord = np.zeros(border)
-        MasP = np.zeros(border)
-        indecies = np.argsort(Mas)[-border:]
-        for i in range (0, border):
-            MasCoord[i] = M1[indecies[i]]
-            MasP[i] = M2[indecies[i]]
-        return MasCoord, MasP
-
+        dt = 1/len(dataT)
+        frqs = np.fft.rfftfreq(len(dataT), 1.0)[1:]
+        scales = pywt.frequency2scale('mexh', frqs)
+        # print(scales)
+        [coefficients, frequencies] = pywt.cwt(dataXZ, scales, self.wavelet, dt)
+        frequencies = np.fft.rfftfreq(len(dataT), 1.0)[1:]
+        print(frequencies)
+        
+        
+        return dataT, coefficients, frequencies
+        
+        
+        

@@ -29,7 +29,23 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QComboBox" name="waveletBox"/>
+      <widget class="QComboBox" name="waveletBox">
+       <item>
+        <property name="text">
+         <string>Mexican Hat</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Morlet</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Gaussian Derivative</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">

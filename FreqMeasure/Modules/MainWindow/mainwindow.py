@@ -7,6 +7,7 @@ from PyQt5 import uic
 import pyqtgraph as pg
 from FreqMeasure.Modules.MainWindow.helpwidget import HelpWidget
 from FreqMeasure.Modules.MainWindow.PhaseWidget.phasewidget import PhaseWidget
+from FreqMeasure.Modules.MainWindow.WaveletWidget.waveletwidget import WaveletWidget
 from FreqMeasure.Modules.MainWindow.StatusWidget.statuswidget import StatusWidget
 
 
@@ -41,7 +42,6 @@ class MainWindow(QMainWindow):
             self.phasebtn = QPushButton('Phase', self)
             self.phase_widget = PhaseWidget(os.path.join(ui_path))
             self.phasebtn.clicked.connect(self.phase_widget.show)
-
             self.ui.verticalLayout.replaceWidget(old_Widget, self.phasebtn)
             old_Widget.deleteLater()
 
@@ -83,6 +83,9 @@ class MainWindow(QMainWindow):
 
         self.help_widget = HelpWidget(os.path.join(ui_path, 'etc/icons/Help_1.png'))
         self.actionHelp.triggered.connect(self.help_widget.show)
+        
+        self.wavelet_widget = WaveletWidget(os.path.join(ui_path))
+        self.waveletbtn.clicked.connect(self.wavelet_widget.show)
 
         self.controlWidgetX.boards_changed.connect(self.boards_X_changed)
         self.controlWidgetZ.boards_changed.connect(self.boards_Z_changed)
@@ -231,9 +234,6 @@ class MainWindow(QMainWindow):
         """   """
         self.data_curve4.setData(data_processor.fftwT, data_processor.fftw_to_process)
         self.fz_rect = self.ui.plotFZ.viewRange()
-        print(self.ui.plotFZ.getAxis('left'))
-        print(self.ui.plotFZ.viewRect(), 'rect')
-        # print(self.ui.plotFZ.viewRange(), 'range')
 
     def on_freq_status_X(self, data_processor):
         """   """
@@ -266,6 +266,20 @@ class MainWindow(QMainWindow):
             pass
         else:
             self.phase_widget.phase_plot_Z(data_processor)
+    
+    def on_wavelet_data_ready_X(self, data_source):
+        """   """
+        if self.bpm == "all":
+            pass
+        else:
+            self.wavelet_widget.wavelet_plot_X(data_source)
+        
+    def on_wavelet_data_ready_Z(self, data_source):
+        """   """
+        if self.bpm == "all":
+            pass
+        else:
+            self.wavelet_widget.wavelet_plot_Z(data_source)
 
     def save_settings(self):
         """   """
@@ -301,7 +315,6 @@ class MainWindow(QMainWindow):
         settings.endGroup()
         settings.endGroup()
 
-        print(self.scale_x, self.scale_z, self.fx_rect, self.fz_rect)
         self.plot_mode(self.ui.plotFX, self.scale_x)
         self.plot_mode(self.ui.plotFZ, self.scale_z)
 
