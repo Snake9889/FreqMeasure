@@ -2,7 +2,7 @@
 #
 from PyQt5.QtCore import pyqtSignal, QObject, QTimer, QSettings
 import numpy as np
-#import pycx4.qcda as cda
+import pycx4.qcda as cda
 from FreqMeasure.Modules.DataSources.BPM_template import BPMTemplate
 from FreqMeasure.Modules.DataSources.datasources_bpm import BPMData
 from FreqMeasure.Modules.MainWindow.StatusWidget.statuswidget import StatusWidget

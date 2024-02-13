@@ -23,7 +23,7 @@ class MplFig(FigureCanvasQTAgg):
 class WaveletWidget(QWidget):
     """   """
     wavelet_changed_str = pyqtSignal(str)
-    
+
     def __init__(self, file_name):
         super(WaveletWidget, self).__init__()
         ui_path = os.path.dirname(os.path.abspath(__file__))
@@ -34,17 +34,17 @@ class WaveletWidget(QWidget):
         phase_icon.addFile(os.path.join(icon_path, 'etc/icons/Psi.png'), QSize(32, 32))
         self.setWindowIcon(phase_icon)
         self.setWindowTitle('Wavelet')
-        
+
         self.ui.WaveletX = self.widgets_replaced(self.ui.WaveletX)
         self.ui.WaveletZ = self.widgets_replaced(self.ui.WaveletZ)
-        
+
         self.wavelet = "mexh"
         self.dataT = None
         self.dataWX = None
         self.dataFX = None
         self.dataWZ = None
         self.dataFZ = None
-        
+
     def widgets_replaced(self, widget):
         """   """
         old_Widget = widget
@@ -71,9 +71,9 @@ class WaveletWidget(QWidget):
         widget = self.ui.WaveletX
         title = 'Wavelet Transform of X-signal'
         cmap = plt.cm.seismic
-        
+
         self.dataT, self.dataWX, self.dataFX = self.cwt_analysis(data_source.dataT, data_source.dataX)
-        
+
         self.update_plot(widget, self.dataT, self.dataWX, self.dataFX, cmap, title)
 
 
@@ -82,13 +82,13 @@ class WaveletWidget(QWidget):
         widget = self.ui.WaveletZ
         title = 'Wavelet Transform of Z-signal'
         cmap = 'jet'
-        
+
         self.dataT, self.dataWZ, self.dataFZ = self.cwt_analysis(data_source.dataT, data_source.dataZ)
-        
+
         self.update_plot(widget, self.dataT, self.dataWZ, self.dataFZ, cmap, title)
         # widget.axes.contourf(self.dataT, self.dataFZ, np.log2((abs(self.dataWZ))**2),
         #                       cmap=cmap, levels=40)
-    
+
         # widget.axes.set_title('Wavelet Transform (Power Spectrum) of signal-Z', fontsize=15)
         # widget.axes.set_ylabel('Frequency', fontsize=13)
         # widget.axes.set_xlabel('Turnover', fontsize=13)
@@ -96,21 +96,20 @@ class WaveletWidget(QWidget):
     def update_plot(self, widget, dataT, dataW, dataF, cmap, title):
 
         widget.axes.cla()
-        widget.axes.contourf(dataT, dataF, np.log2((abs(dataW))**2),
-                             cmap=cmap, levels=40)
+        widget.axes.contourf(dataT, dataF, abs(dataW),
+                             cmap=cmap, levels=5)
         widget.axes.set_title(title, fontsize=15)
         widget.axes.set_ylabel('Frequency', fontsize=13)
         # widget.axes.set_xlabel('Turnover', fontsize=13)
-        widget.draw()    
+        widget.draw()
 
     def cwt_analysis(self, dataT, dataXZ):
         """   """
         dt = 1/len(dataT)
-        frqs = np.fft.rfftfreq(len(dataT), 1.0)[1:]
+        frqs = np.fft.rfftfreq(len(dataT), 1.0)[int(len(dataT)/10):int(len(dataT)/5)]
         scales = pywt.frequency2scale('mexh', frqs)
         [coefficients, frequencies] = pywt.cwt(dataXZ, scales, self.wavelet, dt)
-        
+
         return dataT, coefficients, frqs
-        
-        
-        
+
+
