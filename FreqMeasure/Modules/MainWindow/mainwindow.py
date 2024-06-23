@@ -60,11 +60,13 @@ class MainWindow(QMainWindow):
         self.data_proc_Z.data_processed.connect(self.on_data3_ready)
 
         self.controlWidgetX.window_changed_str.connect(self.data_proc_X.on_wind_changed)
+        self.controlWidgetX.filter_changed_str.connect(self.data_proc_X.on_filter_changed)
         self.controlWidgetX.groupBox.setTitle("X Controller")
         self.controlWidgetX.set_str_id("Data_X")
         self.controlWidgetX.scale_changed_obj.connect(self.on_scale_changing)
 
         self.controlWidgetZ.window_changed_str.connect(self.data_proc_Z.on_wind_changed)
+        self.controlWidgetZ.filter_changed_str.connect(self.data_proc_Z.on_filter_changed)
         self.controlWidgetZ.groupBox.setTitle("Z Controller")
         self.controlWidgetZ.set_str_id("Data_Z")
         self.controlWidgetZ.scale_changed_obj.connect(self.on_scale_changing)

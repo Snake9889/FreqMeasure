@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     icon_path = os.path.dirname(os.path.abspath(__file__))
     mw_icon = QIcon()
-    mw_icon.addFile(os.path.join(icon_path, 'etc/icons/app_icon_color.png'), QSize(32, 32))
+    mw_icon.addFile(os.path.join(icon_path, 'Modules/MainWindow/etc/icons/app_icon_color.png'), QSize(32, 32))
     mw.setWindowIcon(mw_icon)
 
     data_source.data_ready.connect(mw.on_data1_ready)

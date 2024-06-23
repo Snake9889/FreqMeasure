@@ -1,4 +1,3 @@
-
 from PyQt5.QtCore import pyqtSignal, QObject, QTimer
 import numpy as np
 from FreqMeasure.Modules.DataSources.BPM_template import BPMTemplate

@@ -3,6 +3,8 @@
 from PyQt5.QtCore import pyqtSignal, Qt, QObject, QTimer
 import numpy as np
 import math
+import statsmodels.api as sm
+from sklearn.decomposition import PCA
 from FreqMeasure.Modules.command_parser import TerminalParser
 
 
@@ -17,6 +19,7 @@ class DataProcessor(QObject):
         argument_parser = TerminalParser()
 
         self.windowType = 'None'
+        self.filterType = 'None'
         self.data_len = data_len
         self.algType = argument_parser.method_name_parsed
         self.bpm = argument_parser.bpm_name_parsed
@@ -52,7 +55,11 @@ class DataProcessor(QObject):
         """   """
         self.windowType = windowType
         self.regen_wind(self.windowType)
-
+        
+    def on_filter_changed(self, filterType):
+        """   """
+        self.filterType = filterType
+        
     def on_method_changed(self, algType):
         """   """
         self.algType = algType
@@ -73,6 +80,19 @@ class DataProcessor(QObject):
             self.window = np.hanning(self.data_len)
         if windowType == 'Hamming':
             self.window = np.hamming(self.data_len)
+            
+    def bk_filter(self, sig, K):
+        lower_period = 1/self.left_bound
+        upper_period = 1/self.right_bound
+        sig_bk = sm.tsa.filters.bkfilter(sig, lower_period, upper_period, K)
+        t_bk = np.linspace(0, len(sig_bk), len(sig_bk))
+        return t_bk, sig_bk
+    
+    def cf_filter(self, sig, drift):
+        lower_period = 1/self.left_bound
+        upper_period = 1/self.right_bound
+        cycle_cf, trend_cf = sm.tsa.filters.cffilter(sig, lower_period, upper_period, drift)
+        return cycle_cf
 
     def on_data_recv(self, data_source):
         """   """
@@ -91,8 +111,18 @@ class DataProcessor(QObject):
             self.data_to_process = self.dataZ
         else:
             return
-
+        
         self.data_to_process = self.data_to_process * self.window
+        
+        if self.filterType == 'None':
+            pass
+        elif self.filterType == 'BK':
+            self.dataT, self.data_to_process = self.bk_filter(self.data_to_process, 55)
+            self.data_len = len(self.dataT)
+        elif self.filterType == 'CF':
+            self.data_to_process = self.cf_filter(self.data_to_process, True)
+        elif self.filterType == 'PCA':
+            pass
 
         if self.bpm == "all":
             self.fftwT = np.fft.rfftfreq(self.data_len, 1.0/4)
@@ -103,7 +133,7 @@ class DataProcessor(QObject):
         else:
             self.fftwT = np.fft.rfftfreq(self.data_len, 1.0)
             self.fftw_to_process = np.abs(np.fft.rfft(self.data_to_process - np.mean(self.data_to_process))) / self.data_len
-
+        
         if self.algType == 'None':
             self.frq_founded = 0.0
             self.warning = 0

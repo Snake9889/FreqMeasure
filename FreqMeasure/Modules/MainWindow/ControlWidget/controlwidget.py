@@ -10,6 +10,7 @@ import os.path
 class ControlWidget(QWidget):
     """   """
     window_changed_str = pyqtSignal(str)
+    filter_changed_str = pyqtSignal(str)
     method_changed_str = pyqtSignal(str)
     boards_changed = pyqtSignal(object)
     scale_changed_obj = pyqtSignal(object)
@@ -26,6 +27,7 @@ class ControlWidget(QWidget):
         argument_parser = TerminalParser()
 
         self.window = "None"
+        self.filter = "None"
         self.method = argument_parser.method_name_parsed
         self.bpm = argument_parser.bpm_name_parsed
         self.boards = None
@@ -52,6 +54,7 @@ class ControlWidget(QWidget):
         self.rboardSBox.setValue(0.3)
 
         self.checkWindowBox.currentIndexChanged.connect(self.on_window_checked)
+        self.checkFilterBox.currentIndexChanged.connect(self.on_filter_checked)
         self.buttonGroup.buttonClicked['int'].connect(self.on_method_checked)
         self.lboardSBox.valueChanged.connect(self.on_lboardsbox_changed)
         self.rboardSBox.valueChanged.connect(self.on_rboardsbox_changed)
@@ -69,6 +72,21 @@ class ControlWidget(QWidget):
             self.window = "None"
 
         self.window_changed_str.emit(self.window)
+        
+    def on_filter_checked(self, state):
+        """   """
+        if state == 0:
+            self.filter = "None"
+        elif state == 1:
+            self.filter = "BK"
+        elif state == 2:
+            self.filter = "CF"
+        elif state == 3:
+            self.filter = "PCA"
+        else:
+            self.filter = "None"
+
+        self.filter_changed_str.emit(self.filter)
 
     def on_method_checked(self, state):
         """   """
@@ -137,6 +155,7 @@ class ControlWidget(QWidget):
         settings.beginGroup(self.bpm)
         settings.beginGroup(self.str_id)
         settings.setValue("window", self.window)
+        settings.setValue("filter", self.filter)
         settings.setValue("method", self.method)
         settings.setValue("lboard", self.lboard)
         settings.setValue("rboard", self.rboard)
@@ -153,6 +172,7 @@ class ControlWidget(QWidget):
             settings.beginGroup(self.bpm)
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "None")
+            self.filter = settings.value("filter", "None")
             self.method = settings.value("method", "None")
             self.lboard = settings.value("lboard", 0.10, type=float)
             self.rboard = settings.value("rboard", 0.25, type=float)
@@ -163,6 +183,7 @@ class ControlWidget(QWidget):
             settings.beginGroup(self.bpm)
             settings.beginGroup(self.str_id)
             self.window = settings.value("window", "Hann")
+            self.filter = settings.value("filter", "None")
             self.method = settings.value("method", "Peak")
             self.lboard = settings.value("lboard", 0.10, type=float)
             self.rboard = settings.value("rboard", 0.30, type=float)
@@ -174,6 +195,8 @@ class ControlWidget(QWidget):
 
         self.checkWindowBox.setCurrentText(self.window)
         self.window_changed_str.emit(self.window)
+        self.checkFilterBox.setCurrentText(self.filter)
+        self.filter_changed_str.emit(self.filter)
 
         if self.scale == "Normal":
             self.log_mod.setCheckState(Qt.Unchecked)
