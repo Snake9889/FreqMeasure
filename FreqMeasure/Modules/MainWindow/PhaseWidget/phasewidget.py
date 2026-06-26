@@ -25,10 +25,15 @@ class PhaseWidget(QWidget):
         self.PX_sort = None
         self.Z_sort = None
         self.PZ_sort = None
+        
+        self.ui.emit_x_label.setText('\u03B5<sub>x</sub> = ')
+        self.ui.emit_z_label.setText('\u03B5<sub>z</sub> = ')
 
         self.plots_customization()
         self.data_curve_X = self.ui.PhaseX.scatterPlot(pen='k', title='X_phase', symbol='o', size=3, brush='r')
+        self.emittance_curve_X = self.ui.PhaseX.plot(pen=pg.mkPen(color='g', width=2))
         self.data_curve_Z = self.ui.PhaseZ.scatterPlot(pen='k', title='Z_phase', symbol='o', size=3, brush='b')
+        self.emittance_curve_Z = self.ui.PhaseZ.plot(pen=pg.mkPen(color='g', width=2))
 
     @staticmethod
     def customise_label(plot, text_item, html_str):
@@ -69,13 +74,33 @@ class PhaseWidget(QWidget):
     def phase_plot_X(self, data_processor):
         """   """
         self.X_sort, self.PX_sort = self.reduction(data_processor.dataX_averaged[0:len(data_processor.momentum)], data_processor.momentum)
+        self.emittance_curve_X.setData(data_processor.dataX_facets)
         self.data_curve_X.setData(self.X_sort, self.PX_sort)
 
     def phase_plot_Z(self, data_processor):
         """   """
         self.Z_sort, self.PZ_sort = self.reduction(data_processor.dataZ_averaged[0:len(data_processor.momentum)], data_processor.momentum)
+        self.emittance_curve_Z.setData(data_processor.dataZ_facets)
         self.data_curve_Z.setData(self.Z_sort, self.PZ_sort)
-        #self.data_curve_Z.setData(data_processor.dataZ_averaged[0:len(data_processor.momentum)], data_processor.momentum)
+        
+    def emittance_result_X(self, data_processor):
+        """   """
+        if data_processor.warning == 0:
+            self.ui.emit_x.setText('{:.5f}'.format(data_processor.emittance_value))
+        elif data_processor.warning == 1:
+            self.ui.emit_x.setText(data_processor.warningText)
+        else:
+            self.ui.emit_x.setText('Unexpected value!')
+    
+    def emittance_result_Z(self, data_processor):
+        """   """
+        if data_processor.warning == 0:
+            self.ui.emit_z.setText('{:.5f}'.format(data_processor.emittance_value))
+        elif data_processor.warning == 1:
+            self.ui.emit_z.setText(data_processor.warningText)
+        else:
+            self.ui.emit_z.setText('Unexpected value!')
+        pass
 
     def reduction(self, M1, M2):
         """   """
@@ -96,4 +121,5 @@ class PhaseWidget(QWidget):
             MasCoord[i] = M1[indecies[i]]
             MasP[i] = M2[indecies[i]]
         return MasCoord, MasP
+    
 

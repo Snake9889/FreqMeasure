@@ -5,6 +5,7 @@ import numpy as np
 import math
 import statsmodels.api as sm
 from sklearn.decomposition import PCA
+from scipy.spatial import ConvexHull
 from FreqMeasure.Modules.command_parser import TerminalParser
 
 
@@ -151,11 +152,16 @@ class DataProcessor(QObject):
         if self.type_to_process == 'X':
             self.dataX_averaged = self.dataX - np.mean(self.dataX)
             self.momentum = self.momentum_calc(self.dataX_averaged)
+            self.dataX_points, self.dataX_facets, self.emittance_value = self.emittance(self.dataX_averaged,
+                                                                                        self.momentum)
         elif self.type_to_process == 'Z':
             self.dataZ_averaged = self.dataZ - np.mean(self.dataZ)
             self.momentum = self.momentum_calc(self.dataZ_averaged)
+            self.dataZ_points, self.dataZ_facets, self.emittance_value = self.emittance(self.dataZ_averaged,
+                                                                                        self.momentum)
         else:
             return
+        
 
         self.data_processed.emit(self)
 
@@ -281,6 +287,17 @@ class DataProcessor(QObject):
                 newMass[i] = (Mas[i+1] - Mas[i] * np.cos(2 * np.pi * self.frq_founded))/np.sin(2 * np.pi * self.frq_founded)
 
         return newMass
+    
+    def emittance(self, phase_coord, phase_momentum):
+        """   """
+        points = np.stack((phase_coord[0:len(phase_momentum)], phase_momentum), axis=1)
+        hull = ConvexHull(points)
+        facets = np.vstack((points[hull.vertices], points[hull.vertices][0]))
+        #print(facets, 'hull_2', len(facets))
+        emittance_value = hull.volume
+        print(emittance_value, 'emittance')
+        
+        return points, facets, emittance_value
 
 
 

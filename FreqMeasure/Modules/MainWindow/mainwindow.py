@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         self.data_curve11 = self.ui.plotSig.plot(pen='r', title='X_plot')
         self.data_curve12 = self.ui.plotSig.plot(pen='b', title='Z_plot')
         self.data_curve2 = self.ui.plotFX.plot(pen='r', title='Fourier Transform X_plot')
-        self.data_curve3 = self.ui.plotI.plot(pen='k', title='I_plot')
+        self.data_curve3 = self.ui.plotI.plot(pen='g', title='I_plot')
         self.data_curve4 = self.ui.plotFZ.plot(pen='b', title='Fourier Transform Z_plot')
 
     @staticmethod
@@ -260,6 +260,7 @@ class MainWindow(QMainWindow):
         if self.bpm == "all":
             pass
         else:
+            self.phase_widget.emittance_result_X(data_processor)
             self.phase_widget.phase_plot_X(data_processor)
 
     def on_phase_status_Z(self, data_processor):
@@ -267,21 +268,22 @@ class MainWindow(QMainWindow):
         if self.bpm == "all":
             pass
         else:
+            self.phase_widget.emittance_result_Z(data_processor)
             self.phase_widget.phase_plot_Z(data_processor)
 
-    def on_wavelet_data_ready_X(self, data_source):
-        """   """
-        if self.bpm == "all":
-            pass
-        else:
-            self.wavelet_widget.wavelet_plot_X(data_source)
+    # def on_wavelet_data_ready_X(self, data_source):
+    #     """   """
+    #     if self.bpm == "all":
+    #         pass
+    #     else:
+    #         self.wavelet_widget.wavelet_plot_X(data_source)
 
-    def on_wavelet_data_ready_Z(self, data_source):
-        """   """
-        if self.bpm == "all":
-            pass
-        else:
-            self.wavelet_widget.wavelet_plot_Z(data_source)
+    # def on_wavelet_data_ready_Z(self, data_source):
+    #     """   """
+    #     if self.bpm == "all":
+    #         pass
+    #     else:
+    #         self.wavelet_widget.wavelet_plot_Z(data_source)
 
     def save_settings(self):
         """   """
